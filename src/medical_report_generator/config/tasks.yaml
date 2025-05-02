@@ -1,0 +1,103 @@
+# tasks.yaml
+# Defines the tasks for the Medical Radiology Report Generation Crew.
+
+extract_medical_data:
+  description: >
+    Analyze the following raw medical text or voice transcript provided as context:
+    ---
+    {raw_input}
+    ---
+    Identify and extract ALL pertinent medical facts, observations, procedures mentioned, patient history relevant to the exam, clinical questions, technical details of the scan, and any other factual information presented. Do NOT interpret or structure it into final report sections yet.
+    The output should be a structured list where each item clearly states what it is (e.g., indication, finding, technique) and its detail.
+
+  expected_output: >
+    A structured list or JSON object containing all extracted key medical facts and observations. Each item should clearly state what it is (e.g., indication, finding, technique) and its detail.
+    Example format:
+    ```json
+    [
+      {"type": "indication", "detail": "patient presents with cough and shortness of breath"},
+      {"type": "technique", "detail": "CT scan of the chest with contrast"},
+      {"type": "finding", "detail": "small nodule in the right upper lobe"},
+      {"type": "measurement", "detail": "nodule measures 5 mm"},
+      {"type": "location", "detail": "right upper lobe"}
+    ]
+    ```
+  agent: information_extractor
+
+map_data_to_template_sections:
+  description: >
+    Take the provided structured list of extracted medical data from the previous task's output. Map each item in the list to the appropriate section(s) of a standard Radiology Report template.
+    The template sections are: Indication, Technique, Incidences, Résultat, Conclusion.
+    Create a dictionary where keys are these section names, and values are lists containing *only* the extracted data points (from the input list) that are relevant to that specific section.
+    If no data points are relevant to a section, the list for that section MUST be empty `[]`. Ensure all template sections are included as keys, even if their list of data points is empty.
+
+  expected_output: >
+    A dictionary or JSON object mapping the template section names (Indication, Technique, Incidences, Résultat, Conclusion) to lists of relevant extracted data points. Ensure the format is strictly followed.
+    Example format:
+    ```json
+    {
+      "Indication": [... list of data points for Indication ...],
+      "Technique": [... list of data points for Technique ...],
+      "Incidences": [... list of data points for Incidences, potentially empty ...],
+      "Résultat": [... list of data points for Résultat ...],
+      "Conclusion": [... list of data points for Conclusion, potentially empty ...]
+    }
+    ```
+  agent: template_mapper
+
+generate_section_content:
+  description: >
+    You are provided with a dictionary mapping Radiology Report template sections to lists of extracted medical data points.
+    For EACH section key (Indication, Technique, Incidences, Résultat, Conclusion), write the final, concise, and professional text for that part of the report based *only* on the data points provided for that section.
+    Ensure the language is appropriate for a medical report - clear, brief, and factual. Avoid jargon where possible, but maintain medical accuracy based on the input.
+    If the list of data points for a section is empty in the input, the output value for that section's content MUST be an empty string `""`.
+    DO NOT include the section header (like "Indication:"). Just provide the content for the section.
+    The output must be a dictionary with the section names as keys and the generated text as values.
+
+  expected_output: >
+    A dictionary or JSON object where keys are the template section names (Indication, Technique, Incidences, Résultat, Conclusion), and values are the final written content string for that section. If a section had no relevant data, its value must be `""`.
+    Example format:
+    ```json
+    {
+      "Indication": "Patient presenting with cough and shortness of breath.",
+      "Technique": "CT scan of the chest performed with intravenous contrast.",
+      "Incidences": "",
+      "Résultat": "A small 5 mm nodule is identified in the right upper lobe.",
+      "Conclusion": "Small right upper lobe nodule, likely benign."
+    }
+    ```
+  agent: report_section_generator
+
+assemble_and_review_report:
+  description: >
+    You are provided with a dictionary containing the final written content for each section of a Radiology Report.
+    Assemble the complete report text following the exact structure below. Include ALL section headers as shown.
+    For sections where the content in the input dictionary is an empty string `""`, include the header but leave the content blank or add a standard placeholder like "-".
+    Format the final output as a plain text string, ready for conversion to a .doc file.
+    The required template structure is:
+    TITRE: [Some general title like "Radiology Report" or derived from input if possible]
+    Indication: [Content or "-"]
+    Technique: [Content or "-"]
+    Incidences: [Content or "-"]
+    Résultat: [Content or "-"]
+    Conclusion: [Content or "-"]
+
+    Perform a final review for structural correctness according to the template and ensure all sections are present in order.
+
+  expected_output: >
+    A single string containing the complete, structured radiology report text formatted exactly as specified by the template, ready for saving to a .doc file. Include headers and content (or placeholder like "-") for all sections.
+    Example format:
+    ```
+    TITRE: Radiology Report - Chest CT
+
+    Indication: Patient presenting with cough and shortness of breath.
+
+    Technique: CT scan of the chest performed with intravenous contrast.
+
+    Incidences: -
+
+    Résultat: A small 5 mm nodule is identified in the right upper lobe.
+
+    Conclusion: Small right upper lobe nodule, likely benign.
+    ```
+  agent: report_finalizer_and_reviewer
