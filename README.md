@@ -1,54 +1,125 @@
 # MedicalReportGenerator Crew
 
-Welcome to the MedicalReportGenerator Crew project, powered by [crewAI](https://crewai.com). This template is designed to help you set up a multi-agent AI system with ease, leveraging the powerful and flexible framework provided by crewAI. Our goal is to enable your agents to collaborate effectively on complex tasks, maximizing their collective intelligence and capabilities.
+Welcome to the MedicalReportGenerator Crew, an advanced AI-based system designed to generate formal medical reports from raw clinical notes and dictations. This project is powered by [crewAI](https://crewai.com), a framework for creating multi-agent AI systems that collaborate effectively on complex tasks.
+
+## Project Overview
+
+This system uses a team of specialized AI agents working together to transform unstructured medical text into properly formatted radiology reports:
+
+1. **Information Extractor**: Identifies and extracts all relevant medical facts from raw input
+2. **Template Mapper**: Maps extracted data to appropriate sections of a standard radiology report 
+3. **Report Section Generator**: Transforms structured data into professional medical language
+4. **Report Finalizer and Reviewer**: Assembles and reviews the final report
+
+The system outputs a professional radiology report in both text and Word document (.docx) formats.
+
+## Requirements
+
+- Python >=3.10 <3.13
+- [UV](https://docs.astral.sh/uv/) for dependency management
+- Hugging Face account with API token (uses Mistral 7B model)
 
 ## Installation
 
-Ensure you have Python >=3.10 <3.13 installed on your system. This project uses [UV](https://docs.astral.sh/uv/) for dependency management and package handling, offering a seamless setup and execution experience.
+1. Ensure you have Python >=3.10 <3.13 installed on your system
 
-First, if you haven't already, install uv:
+2. Install UV (if not already installed):
 
 ```bash
 pip install uv
 ```
 
-Next, navigate to your project directory and install the dependencies:
+3. Clone the repository and navigate to the project directory
 
-(Optional) Lock the dependencies and install them by using the CLI command:
+4. Install dependencies:
+
 ```bash
 crewai install
 ```
-### Customizing
 
-**Add your `OPENAI_API_KEY` into the `.env` file**
+## Configuration Setup
 
-- Modify `src/medical_report_generator/config/agents.yaml` to define your agents
-- Modify `src/medical_report_generator/config/tasks.yaml` to define your tasks
-- Modify `src/medical_report_generator/crew.py` to add your own logic, tools and specific args
-- Modify `src/medical_report_generator/main.py` to add custom inputs for your agents and tasks
+1. Create a `.env` file in the project root based on the provided `.env.example`:
+
+```bash
+cp .env.exemple .env
+```
+
+2. Add your **Hugging Face API token** to the `.env` file:
+
+```
+HF_TOKEN=your_huggingface_token_here
+```
+
+You can obtain a token from your [Hugging Face account settings](https://huggingface.co/settings/tokens).
 
 ## Running the Project
 
-To kickstart your crew of AI agents and begin task execution, run this from the root folder of your project:
+Run the medical report generator from the root folder of your project:
 
 ```bash
-$ crewai run
+crewai run
 ```
 
-This command initializes the medical_report_generator Crew, assembling the agents and assigning them tasks as defined in your configuration.
+This will:
+1. Initialize all the AI agents
+2. Process the sample medical text in `main.py`
+3. Generate a structured radiology report
+4. Create a formatted `radiology_report.docx` file in the project root
 
-This example, unmodified, will run the create a `report.md` file with the output of a research on LLMs in the root folder.
+## Customizing the Project
 
-## Understanding Your Crew
+### Input Medical Text
 
-The medical_report_generator Crew is composed of multiple AI agents, each with unique roles, goals, and tools. These agents collaborate on a series of tasks, defined in `config/tasks.yaml`, leveraging their collective skills to achieve complex objectives. The `config/agents.yaml` file outlines the capabilities and configurations of each agent in your crew.
+To process your own medical text, modify the `raw_medical_input` variable in `src/medical_report_generator/main.py`.
+
+### Agent Configuration
+
+Each agent can be customized in `src/medical_report_generator/config/agents.yaml`:
+- Modify roles, goals, and backstories
+- Change or configure the LLM models used
+
+### Report Template
+
+The report structure is defined in `src/medical_report_generator/config/tasks.yaml`. You can modify:
+- Section names and organization
+- Expected data formats
+- Report generation instructions
+
+## Project Structure
+
+```
+medical_report_generator/
+├── .env                  # Environment variables (HF_TOKEN)
+├── pyproject.toml        # Project dependencies and configuration
+├── README.md             # This documentation file
+├── src/
+│   └── medical_report_generator/
+│       ├── config/
+│       │   ├── agents.yaml   # Agent definitions and LLM configurations
+│       │   └── tasks.yaml    # Task definitions and workflow
+│       ├── crew.py           # Agent collaboration setup
+│       ├── main.py           # Main execution script with sample input
+│       └── tools/            # Custom tools for agents (if needed)
+```
+
+## How It Works
+
+1. **Data Extraction**: The Information Extractor agent analyzes raw medical text to identify key clinical details
+2. **Template Mapping**: The Template Mapper organizes extracted information into appropriate report sections
+3. **Report Generation**: The Report Section Generator writes professional content for each section
+4. **Review and Assembly**: The Finalizer assembles and formats the complete report
+5. **Document Creation**: The system generates a formatted Word document
+
+## Troubleshooting
+
+- **Model Access Issues**: Ensure your Hugging Face token has permission to access the Mistral model
+- **Python Version Errors**: Verify you're using Python >=3.10 <3.13
+- **Document Generation Errors**: Check that python-docx is properly installed
 
 ## Support
 
-For support, questions, or feedback regarding the MedicalReportGenerator Crew or crewAI.
-- Visit our [documentation](https://docs.crewai.com)
-- Reach out to us through our [GitHub repository](https://github.com/joaomdmoura/crewai)
-- [Join our Discord](https://discord.com/invite/X4JWnZnxPb)
-- [Chat with our docs](https://chatg.pt/DWjSBZn)
-
-Let's create wonders together with the power and simplicity of crewAI.
+For questions about this project:
+- Check the [crewAI documentation](https://docs.crewai.com)
+- Visit the [crewAI GitHub repository](https://github.com/joaomdmoura/crewai)
+- Join the [crewAI Discord community](https://discord.com/invite/X4JWnZnxPb)
