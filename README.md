@@ -17,7 +17,7 @@ The system outputs a professional radiology report in both text and Word documen
 
 - Python >=3.10 <3.13
 - [UV](https://docs.astral.sh/uv/) for dependency management
-- Hugging Face account with API token (uses Mistral 7B model)
+- Google AI Studio account with API Key (uses Gemini 2.0 flash model)
 
 ## Installation
 
@@ -45,13 +45,13 @@ crewai install
 cp .env.exemple .env
 ```
 
-2. Add your **Hugging Face API token** to the `.env` file:
+2. Add your **Gemini API Key** to the `.env` file:
 
 ```
-HF_TOKEN=your_huggingface_token_here
+GEMINI_API_KEY=your_gemini_api_key_here
 ```
 
-You can obtain a token from your [Hugging Face account settings](https://huggingface.co/settings/tokens).
+You can obtain a token from your [Google AI Studio account](https://aistudio.google.com/apikey).
 
 ## Running the Project
 
@@ -113,7 +113,7 @@ medical_report_generator/
 
 ## Troubleshooting
 
-- **Model Access Issues**: Ensure your Hugging Face token has permission to access the Mistral model
+- **Model Access Issues**: Ensure your gemini api key  has permission to access the model
 - **Python Version Errors**: Verify you're using Python >=3.10 <3.13
 - **Document Generation Errors**: Check that python-docx is properly installed
 
