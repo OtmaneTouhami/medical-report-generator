@@ -1,103 +1,173 @@
 # tasks.yaml
-# Defines the tasks for the Medical Radiology Report Generation Crew.
+# Définit les tâches pour l'équipe de Génération de Rapports Radiologiques Médicaux.
 
-extract_medical_data:
+classify_report_type:
   description: >
-    Analyze the following raw medical text or voice transcript provided as context:
+    Analysez le texte médical brut suivant ou la transcription vocale fournie comme contexte (en français):
     ---
     {raw_input}
     ---
-    Identify and extract ALL pertinent medical facts, observations, procedures mentioned, patient history relevant to the exam, clinical questions, technical details of the scan, and any other factual information presented. Do NOT interpret or structure it into final report sections yet.
-    The output should be a structured list where each item clearly states what it is (e.g., indication, finding, technique) and its detail.
-
+    Utilisez l'outil `classify_report_type` pour déterminer le type spécifique d'examen médical décrit dans le texte.
+    Considérez la partie du corps examinée, le contexte médical, la terminologie spécifique, et tout autre indice qui
+    pourrait indiquer de quel type de rapport IRM il s'agit. La sortie doit être en français.
   expected_output: >
-    A structured list or JSON object containing all extracted key medical facts and observations. Each item should clearly state what it is (e.g., indication, finding, technique) and its detail.
-    Example format:
+    Une chaîne de caractères indiquant le type de rapport identifié en français (par exemple, "irm_hépatique", "irm_genou", etc.).
+    Exemple:
+    ```
+    irm_genou
+    ```
+  agent: report_classifier
+
+extract_medical_data:
+  description: >
+    Analysez le texte médical brut suivant ou la transcription vocale fournie comme contexte (en français):
+    ---
+    {raw_input}
+    ---
+    Premièrement, utilisez le `report_type` (type de rapport) de la tâche précédente pour récupérer des rapports similaires
+    de la base de connaissances à l'aide de l'outil `retrieve_similar_reports`.
+    Ensuite, identifiez et extrayez TOUS les faits médicaux pertinents, observations, procédures mentionnées, antécédents du patient
+    pertinents pour l'examen, questions cliniques, détails techniques de l'examen, et toute autre information factuelle présentée, en français.
+    Utilisez les rapports similaires comme référence pour le type d'informations à extraire.
+    N'interprétez PAS et ne structurez PAS encore ces informations dans les sections finales du rapport.
+    La sortie doit être une liste structurée en français où chaque élément indique clairement ce qu'il est (par exemple, indication, constatation, technique) et son détail.
+  expected_output: >
+    Une liste structurée ou un objet JSON en français contenant tous les faits et observations médicales clés extraits.
+    Chaque élément doit clairement indiquer ce qu'il est (par exemple, indication, constatation, technique) et son détail.
+    Format d'exemple en français:
     ```json
     [
-      {"type": "indication", "detail": "patient presents with cough and shortness of breath"},
-      {"type": "technique", "detail": "CT scan of the chest with contrast"},
-      {"type": "finding", "detail": "small nodule in the right upper lobe"},
-      {"type": "measurement", "detail": "nodule measures 5 mm"},
-      {"type": "location", "detail": "right upper lobe"}
+      {"type": "indication", "detail": "le patient présente une toux et un essoufflement"},
+      {"type": "technique", "detail": "scanner thoracique avec contraste"},
+      {"type": "constatation", "detail": "petit nodule dans le lobe supérieur droit"},
+      {"type": "mesure", "detail": "le nodule mesure 5 mm"},
+      {"type": "localisation", "detail": "lobe supérieur droit"}
     ]
     ```
   agent: information_extractor
 
 map_data_to_template_sections:
   description: >
-    Take the provided structured list of extracted medical data from the previous task's output. Map each item in the list to the appropriate section(s) of a standard Radiology Report template.
-    The template sections are: Indication, Technique, Incidences, Résultat, Conclusion.
-    Create a dictionary where keys are these section names, and values are lists containing *only* the extracted data points (from the input list) that are relevant to that specific section.
-    If no data points are relevant to a section, the list for that section MUST be empty `[]`. Ensure all template sections are included as keys, even if their list of data points is empty.
-
+    Prenez la liste structurée fournie des données médicales extraites (en français) de la sortie de la tâche précédente.
+    Mappez chaque élément de la liste à la ou aux sections appropriées d'un modèle de rapport radiologique standard.
+    Les sections du modèle sont : Indication, Technique, Incidences, Résultat, Conclusion.
+    Créez un dictionnaire où les clés sont ces noms de section, et les valeurs sont des listes contenant *uniquement* les points de données
+    extraits (de la liste d'entrée) qui sont pertinents pour cette section spécifique. La sortie doit être en français.
+    Si aucun point de données n'est pertinent pour une section, la liste pour cette section DOIT être vide `[]`. Assurez-vous que toutes les sections
+    du modèle sont incluses comme clés, même si leur liste de points de données est vide.
   expected_output: >
-    A dictionary or JSON object mapping the template section names (Indication, Technique, Incidences, Résultat, Conclusion) to lists of relevant extracted data points. Ensure the format is strictly followed.
-    Example format:
+    Un dictionnaire ou un objet JSON en français mappant les noms de section du modèle (Indication, Technique, Incidences, Résultat, Conclusion)
+    à des listes de points de données extraits pertinents. Assurez-vous que le format est strictement suivi.
+    Format d'exemple en français:
     ```json
     {
-      "Indication": [... list of data points for Indication ...],
-      "Technique": [... list of data points for Technique ...],
-      "Incidences": [... list of data points for Incidences, potentially empty ...],
-      "Résultat": [... list of data points for Résultat ...],
-      "Conclusion": [... list of data points for Conclusion, potentially empty ...]
+      "Indication": [... liste de points de données pour l'Indication ...],
+      "Technique": [... liste de points de données pour la Technique ...],
+      "Incidences": [... liste de points de données pour les Incidences, potentiellement vide ...],
+      "Résultat": [... liste de points de données pour le Résultat ...],
+      "Conclusion": [... liste de points de données pour la Conclusion, potentiellement vide ...]
     }
     ```
   agent: template_mapper
 
 generate_section_content:
   description: >
-    You are provided with a dictionary mapping Radiology Report template sections to lists of extracted medical data points.
-    For EACH section key (Indication, Technique, Incidences, Résultat, Conclusion), write the final, concise, and professional text for that part of the report based *only* on the data points provided for that section.
-    Ensure the language is appropriate for a medical report - clear, brief, and factual. Avoid jargon where possible, but maintain medical accuracy based on the input.
-    If the list of data points for a section is empty in the input, the output value for that section's content MUST be an empty string `""`.
-    DO NOT include the section header (like "Indication:"). Just provide the content for the section.
-    The output must be a dictionary with the section names as keys and the generated text as values.
-
+    Un dictionnaire vous est fourni, mappant les sections du modèle de rapport radiologique à des listes de points de données médicales extraites (en français).
+    Pour CHAQUE clé de section (Indication, Technique, Incidences, Résultat, Conclusion), rédigez le texte final, concis et professionnel en français
+    pour cette partie du rapport, en vous basant *uniquement* sur les points de données fournis pour cette section.
+    Assurez-vous que le langage est approprié pour un rapport médical français – clair, bref et factuel. Évitez le jargon si possible,
+    mais maintenez la précision médicale basée sur l'entrée.
+    Si la liste des points de données pour une section est vide dans l'entrée, la valeur de sortie pour le contenu de cette section DOIT être une chaîne vide `""`.
+    N'INCLUEZ PAS l'en-tête de section (comme "Indication:"). Fournissez simplement le contenu de la section en français.
+    La sortie doit être un dictionnaire avec les noms de section comme clés et le texte généré comme valeurs, le tout en français.
   expected_output: >
-    A dictionary or JSON object where keys are the template section names (Indication, Technique, Incidences, Résultat, Conclusion), and values are the final written content string for that section. If a section had no relevant data, its value must be `""`.
-    Example format:
+    Un dictionnaire ou un objet JSON en français où les clés sont les noms de section du modèle (Indication, Technique, Incidences, Résultat, Conclusion),
+    et les valeurs sont la chaîne de contenu final écrite pour cette section. Si une section n'avait pas de données pertinentes, sa valeur doit être `""`.
+    Format d'exemple en français:
     ```json
     {
-      "Indication": "Patient presenting with cough and shortness of breath.",
-      "Technique": "CT scan of the chest performed with intravenous contrast.",
+      "Indication": "Patient présentant toux et essoufflement.",
+      "Technique": "Scanner thoracique réalisé avec contraste intraveineux.",
       "Incidences": "",
-      "Résultat": "A small 5 mm nodule is identified in the right upper lobe.",
-      "Conclusion": "Small right upper lobe nodule, likely benign."
+      "Résultat": "Un petit nodule de 5 mm est identifié dans le lobe supérieur droit.",
+      "Conclusion": "Petit nodule du lobe supérieur droit, probablement bénin."
     }
     ```
   agent: report_section_generator
 
+validate_semantic_coherence:
+  description: >
+    Le dictionnaire suivant contient le contenu textuel (en français) pour chaque section d'un rapport radiologique (produit par la tâche `generate_section_content`).
+    ---
+    {{generate_section_content.output}} <--- Ceci est le résultat de la tâche `generate_section_content`.
+    ---
+    Votre tâche est d'examiner attentivement ce contenu pour toute incohérence sémantique, contradiction clinique, ou affirmation médicalement improbable.
+    Vérifiez spécifiquement si :
+    1. L'Indication est cohérente avec les Résultats et la Conclusion.
+    2. Les Résultats ne se contredisent pas.
+    3. La Conclusion découle logiquement des Résultats.
+    4. Il n'y a pas d'affirmations qui semblent cliniquement erronées ou hautement improbables pour le contexte (si un contexte général est déductible).
+    Si vous trouvez des problèmes, annotez-les clairement OU proposez des reformulations pour améliorer la cohérence.
+    Si le contenu semble cohérent et correct, retournez le dictionnaire d'origine sans modification ou avec une simple note de validation.
+    La sortie doit être le dictionnaire des sections (potentiellement annoté ou corrigé), en français.
+  expected_output: >
+    Un dictionnaire ou un objet JSON (en français) où les clés sont les noms de section du modèle (Indication, Technique, Incidences, Résultat, Conclusion),
+    et les valeurs sont le contenu textuel pour cette section, potentiellement avec des annotations, des suggestions de correction, ou les corrections appliquées.
+    Si aucune incohérence majeure n'est trouvée, le contenu original des sections doit être retourné, éventuellement avec une note confirmant la validation.
+    Exemple de sortie si une correction est suggérée pour la Conclusion :
+    ```json
+    {
+      "Indication": "Patient présentant toux et essoufflement.",
+      "Technique": "Scanner thoracique réalisé avec contraste intraveineux.",
+      "Incidences": "",
+      "Résultat": "Un petit nodule de 5 mm est identifié dans le lobe supérieur droit.",
+      "Conclusion": "[Correction suggérée: Conclure sur la nature bénigne probable est prématuré sans suivi.] Petit nodule du lobe supérieur droit. Un suivi est recommandé."
+    }
+    ```
+  agent: semantic_validator
+  context:
+    - generate_section_content
+
 assemble_and_review_report:
   description: >
-    You are provided with a dictionary containing the final written content for each section of a Radiology Report.
-    Assemble the complete report text following the exact structure below. Include ALL section headers as shown.
-    For sections where the content in the input dictionary is an empty string `""`, include the header but leave the content blank or add a standard placeholder like "-".
-    Format the final output as a plain text string, ready for conversion to a .doc file.
-    The required template structure is:
-    TITRE: [Some general title like "Radiology Report" or derived from input if possible]
-    Indication: [Content or "-"]
-    Technique: [Content or "-"]
-    Incidences: [Content or "-"]
-    Résultat: [Content or "-"]
-    Conclusion: [Content or "-"]
+    Vous avez deux entrées principales :
+    1. Le contenu final écrit et potentiellement validé/annoté (en français) pour chaque section d'un rapport radiologique (produit par la tâche `validate_semantic_coherence`). Ceci est disponible via `{{validate_semantic_coherence.output}}`.
+    2. Le type de rapport IRM spécifique identifié (par exemple, "irm_genou", "irm_hepatique") (produit par la tâche `classify_report_type`). Ceci est disponible via `{{classify_report_type.output}}`.
 
-    Perform a final review for structural correctness according to the template and ensure all sections are present in order.
+    Votre tâche est d'assembler le texte complet du rapport en français.
+    Commencez par formuler un TITRE approprié en utilisant le type de rapport IRM identifié. Par exemple, si le type est "irm_genou", le titre pourrait être "Compte Rendu IRM du Genou".
+    Ensuite, structurez le rapport en suivant la structure exacte ci-dessous, en incluant TOUS les en-têtes de section tels quels.
+    Interprétez les annotations ou corrections du validateur sémantique (provenant de `{{validate_semantic_coherence.output}}`) si présentes et intégrez-les de manière appropriée dans le texte final des sections.
+    Pour les sections où le contenu est une chaîne vide `""`, incluez l'en-tête mais laissez le contenu vide ou ajoutez le substitut standard "Néant".
+    Formatez la sortie finale comme une chaîne de texte brut en français, prête pour la conversion en fichier .doc.
 
+    La structure de modèle requise est (les en-têtes doivent être exactement comme indiqué) :
+    TITRE: [Titre formulé à partir du type de rapport IRM identifié]
+    Indication: [Contenu ou "Néant"]
+    Technique: [Contenu ou "Néant"]
+    Incidences: [Contenu ou "Néant"]
+    Résultat: [Contenu ou "Néant"]
+    Conclusion: [Contenu ou "Néant"]
+
+    Effectuez une révision finale de la correction structurelle selon le modèle et assurez-vous que toutes les sections sont présentes dans l'ordre. Le rapport final doit être entièrement en français.
   expected_output: >
-    A single string containing the complete, structured radiology report text formatted exactly as specified by the template, ready for saving to a .doc file. Include headers and content (or placeholder like "-") for all sections.
-    Example format:
+    Une seule chaîne de caractères contenant le texte complet et structuré du rapport radiologique en français, avec un TITRE dynamique basé sur le type d'IRM,
+    formaté exactement comme spécifié par le modèle, prêt à être enregistré dans un fichier .doc.
+    Exemple format en français (si type_irm = "irm_genou"):
     ```
-    TITRE: Radiology Report - Chest CT
+    TITRE: Compte Rendu IRM du Genou
 
-    Indication: Patient presenting with cough and shortness of breath.
+    Indication: Patient présentant des douleurs au genou.
 
-    Technique: CT scan of the chest performed with intravenous contrast.
+    Technique: Séquences T1, T2.
 
-    Incidences: -
+    Incidences: Néant
 
-    Résultat: A small 5 mm nodule is identified in the right upper lobe.
+    Résultat: Lésion méniscale.
 
-    Conclusion: Small right upper lobe nodule, likely benign.
+    Conclusion: Lésion méniscale interne.
     ```
   agent: report_finalizer_and_reviewer
+  context:
+    - validate_semantic_coherence
+    - classify_report_type

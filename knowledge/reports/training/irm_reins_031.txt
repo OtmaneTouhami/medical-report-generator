@@ -1,0 +1,22 @@
+TITRE: 
+IRM RÉNALE
+
+Indication: 
+Caractérisation d’une lésion rénale
+
+Technique: 
+Séquences axiale T1 in /out phase, axial T2, axial diffusion avec cartographie d’ADC, axial T1 avec saturation de la graisse avant et après injection au temps artériel, portal, tardif puis coronal T1 tardif.
+
+Incidences: 
+
+Résultat: 
+Les reins sont en position habituelle de taille normal (droite   mm, gauche   mm), sans dilatation des cavités pyélocalicielle.
+
+Le rein (droit ou gauche) est le siège d’une lésion de … mm (grand axe), siège (polaire supérieur, médiorénal, polaire inférieur, lèvre antérieur ou postérieur), de développement endo ou exorénal. Elle est en …signal T1, …signal T2, diffusion avec un ADC … avec un rehaussement   après injection.
+Pas d’anomalie de la graisse péri-rénal.
+Pas de ganglions du hile rénal.
+
+Autres : surrénales, foie sans anomalies, pas d’épanchement libre.
+
+Conclusion: 
+Lésion

@@ -1,0 +1,28 @@
+TITRE: 
+IRM ENCEPHALIQUE
+
+CONTEXTE:
+Bilan de céphalées
+
+Indication: 
+
+Technique: 
+Séquences axiales FLAIR, T2*, diffusion ; 3D : ARM des artères intracraniennes ; après injection de produit de contraste gadoliné : 3DT1
+
+Incidences: 
+
+Résultat: 
+Structures médianes en place.
+Pas d’anomalie du signal FLAIR du parenchyme cérébral sus ou sous tentoriel.
+Pas de disparité de calibre des artères intracraniennes.
+Pas de stigmates hémorragiques intra ou extra axiaux en pondération T2*.
+Pas d’hypersignal de diffusion du parenchyme cérébral.
+Pas  de masse supra-sellaire.
+Pas d’hydrocéphalie.
+Pas d’anomalie de la charnière cervico-occipitale.
+Structures sinusiennes libres.
+Structures veineuses perméables.
+Pas de prise de contraste intra ou extra parenchymateuse suspecte.
+
+Conclusion: 
+Pas d’anomalie décelée

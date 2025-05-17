@@ -1,0 +1,11 @@
+TITRE: {title}
+
+Indication: {indication}
+
+Technique: {technique}
+
+Incidences: {incidences}
+
+Résultat: {résultat}
+
+Conclusion: {conclusion}

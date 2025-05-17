@@ -1,0 +1,24 @@
+TITRE: 
+IRM AORTIQUE
+
+Indication: 
+Bilan
+
+Technique: 
+
+Incidences: 
+
+Résultat: 
+Orifice aortique :
+Sigmoïdes :
+Jonction sino-tubulaire :
+Aorte ascendante :
+Crosse aortique (au pied de l’artère sous clavière gauche) :
+Aorte descendante :
+
+Valve aortique bicuspide / tricuspide
+Régurgitation oui / non / importance
+Coarctation oui / non
+
+Conclusion: 
+Absence d’anomalie significative décelée.

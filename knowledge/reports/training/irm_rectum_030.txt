@@ -1,0 +1,52 @@
+TITRE: 
+IRM DU RECTUM
+
+Indication: 
+Bilan d’extension loco-régional d’un cancer rectal.
+Résultats du TR :
+Résultats de l’endoscopie :
+
+Technique: 
+Opacification rectale, séquences T2 3 plans et séquence diffusion axiale.
+Autres séquences :
+
+Incidences: 
+
+Résultat: 
+Tumeur :
+– Localisation du pôle inférieur par rapport à la marge anale :
+– Localisation du pôle inférieur par rapport au bord supérieur du sphincter interne : 
+– Localisation du pôle inférieur par rapport au bord supérieur du muscule puborectal : 
+– Localisation du pôle inférieur par rapport à la ligne de réflexion péritonéale :
+– Localisation aux muscles releveurs de l’anus, puborectal et sphincters interne et externe :
+– Pourcentage d’envahissement de la circonférence (25% / 50% / 75% circonférentiel) :
+– Siège sur la circonférence (antérieure / latérale droite / latérale gauche / postérieure ) :
+– Dimensions de la tumeur dans les 3 plans (hauteur, largeur et en antéropostérieur) :
+– Marge circonférentielle (avec le fascia recti) :
+– Envahissement du fascia recti (présence/absence) :
+– Envahissement de la ligne de réflexion péritonéale (présence/absence) :
+– Invasion vasculaire extra-murale (présence/absence) :
+
+Extension de la tumeur dans le mésorectum :
+T1 (sous-muqueuse)
+T2 (musculeuse)
+T3 : extension au mésorectum (perte de la musculeuse)
+Distance minimale en mm du bord externe de la tumeur au fascia recti
+T4 : Atteinte d’un organe adjacent :
+Vessie, vagin, utérus, paroi pelvienne, prostate, vésicule séminale, grêle, colon.
+Atteinte des releveurs : oui non
+
+Extension ganglionnaire :
+– Ganglions dans le mésorectum (présence/absence) :
+* Nombre :
+* Taille et siège du plus gros (> 3 mm) :
+* Distance du ganglion suspect par rapport au fascia recti (en mm) :
+
+– Autres ganglions pelviens (présence/absence) :
+
+Conclusion: 
+Extension tumorale : 
+Adénopathies :
+Atteinte à distance :
+
+Classification T et N proposée : 

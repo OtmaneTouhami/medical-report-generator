@@ -1,0 +1,38 @@
+TITRE: 
+ENTERO-IRM
+
+Indication: 
+Antécédents chirurgicaux (type de résection) :
+
+Technique: 
+T2, diffusion, T1 après injection de gadolinium
+
+Incidences: 
+
+Résultat: 
+Qualité de la distension du grêle : mauvaise / moyenne / bonne
+
+Anomalies pariétales
+Épaississement pariétal :
+Siège :
+Longueur de l’atteinte :
+Hypersignal en diffusion :
+Prise de contraste pariétale :
+Sténoses :
+Dilatation pré-sténotique :
+Ulcérations profondes :
+
+Anomalies extra-pariétales
+Fistules :
+Masse inflammatoire :
+Abcès :
+Hypervascularisation du mésentère :
+Sclérolipomatose :
+Ganglions :
+
+Autres atteintes
+Atteinte du cadre colique (y compris l’appendice) :
+Atteinte à distance d’autres anses grêles :
+
+Conclusion: 
+Pas d’anomalie décelée

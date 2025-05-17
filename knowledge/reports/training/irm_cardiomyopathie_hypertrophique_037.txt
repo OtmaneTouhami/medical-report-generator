@@ -1,0 +1,60 @@
+TITRE: 
+IRM CARDIAQUE
+
+Indication: 
+Suspicion de cardiomyopathie hypertrophique
+
+Technique: 
+Séquences ciné SSFP: en petit axe de la base à l’apex couvrant le VG, 2 cavités et 4 cavités VG,
+LVOT1,
+Séquence de rehaussement tardif après injection de gadolinium.
+La dose de gadolinium peut varier entre 0,1et 0,2 mmol/kg. En cas de simple dose un délai
+inférieur à 10min peut être utilisé pour la réalisation des séquences.
+Optionnels
+Séquences de cartographie paramétrique avec T1 natif et cartographie ECV
+Perfusion sous stress
+Séquence de flux au niveau de la chambre de chasse VG pour la mesure du gradient 
+
+Incidences: 
+
+Résultat: 
+Analyse quantitative de la cinétique:
+Paramètres VG
+FEVG %
+VTDVG ml/m2
+VTSVG ml/m2
+Masse myocardique g/m2
+L’épaisseur maximale de la paroi du VG sur les coupes petit axe en télédiastole (ne pas mesurer
+les trabéculations VG ou VD) est inférieure à 13mm (mesure non en faveur d’une CMH), entre
+13 et 15mm (zone grise) ou supérieur ou égale à 15mm (en faveur du diagnostic) au niveau de la
+paroi .
+Préciser le nombre et la localisation des segments atteint
+Figure 1 : rappel de la segmentation myocardique du ventricule gauche à 17 segments d’après Cerqueira
+et al ; Circulation 2002.
+Recherche des autres signes phénotypique en faveur du diagnostic de CMH.
+Atteinte de l’apex du VD
+Présence de cryptes myocardiques (>3 cryptes, en faveur du diagnostic)
+Augmentation de la taille des feuillets valvulaire mitraux > 30mm pour le feuillet antérieur et >
+17mm pour le feuillet postérieur
+Obstacle sous valvulaire aortique
+Anomalie de l’appareil sous valvulaire mitral
+Le volume de l’oreillette gauche est mesuré à .
+Figure 2 : illustrant la manière de mesurer la taille de l’OG. Volume de l’oreillette gauche=
+0,85*(A1xA2)/L (L mesure la plus petite des deux)
+On note la présence / l’absence de prise de contraste du ventricule gauche localisé au niveau de
+la zone hypertrophique / de l’insertion du ventricule droit sur le ventricule gauche/ de la paroi
+latéro basale (peut être en faveur d’une maladie de Fabry)
+En cas de CMH medio ventriculaire il est important de rechercher la présence d’un anévrisme
+apical VG et ou la présence d’un thrombus dans cet anévrisme.
+Optionnel
+La valeur du T1 natif dans les zones normales est mesurée à : ms, et à ms dans les zones
+pathologiques. On note que la maladie de Fabry peut être à l’origine d’une baisse du T1 natif au
+niveau du septum. A l’inverse l’augmentation du T1 peut être en faveur d’une amylose.
+La valeur de l’ECV dans les zones normales est mesurée à : , et à dans les zones
+pathologiques
+Le rehaussement myocardique intéresse % de la masse VG en utilisant comme méthode de
+segmentation.
+
+Conclusion: 
+Présence / Absence de signe en faveur d'une cardiomyopathie hypertrophique,
+pas de signe en faveur d’une maladie de Fabry ou d’une amylose.

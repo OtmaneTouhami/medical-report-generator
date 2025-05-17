@@ -1,0 +1,26 @@
+TITRE: 
+IRM ENCEPHALIQUE
+
+CONTEXTE:
+Bilan d’épilepsie
+
+Indication: 
+
+Technique: 
+IRM 1,5 Tesla
+– Séquence axiale : T2*, diffusion, T1IR
+– Séquence coronale : T2
+– Séquences 3D : FLAIR, T1 après injection de produit de contraste
+
+Incidences: 
+
+Résultat: 
+Absence d’anomalie de morphologie, de signal ou de rotation des formations hippocampiques.
+Absence de signe d’hétérotopie ou dysplasie corticale visualisé.
+Pas de stigmate hémorragique intra ou extra axial en pondération T2*.
+Absence de processus occupant l’espace visualisé.
+Structures médianes en place.
+Pas d’hydrocéphalie.
+
+Conclusion: 
+Examen normal.

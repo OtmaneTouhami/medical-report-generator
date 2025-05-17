@@ -1,0 +1,53 @@
+TITRE: 
+IRM CARDIAQUE et AORTIQUE
+
+Indication: 
+Recherche d’une bicuspidie
+Bilan d’une dilatation de l’aorte ascendante
+
+Technique:
+Séquences ciné SSFP: LVOT 1, LVOT 2, plan de valves couvrant de l’anneau à la jonction sino
+tubulaire.
+Séquence 3D sang blanc avec gating respiratoire centré sur l’aorte ascendante la crosse et
+l’aorte thoracique descendante
+Optionnels
+SSFP single shot axial strict couvrant tout le thorax
+Quantification de la fuite aortique en contraste de phase (cf cr IAO)
+4D Flow
+
+Incidences: 
+
+Résultat: 
+Caractérisation de la valve aortique
+La valve aortique est tricuspide, sans fuite
+La valve aortique est bicuspide avec une bicuspidie de type . (note : la recherche d’une
+bicuspidie ce fait en systole)
+On note la présence / l’absence de rétrécissement valvulaire aortique / de fuite valvulaire aortique
+(note en cas d’insuffisance aortique une quantification de cette fuite peut être faite, cf CR IAO).
+Caractérisation des diamètres aortiques. 
+Le segment 0 mesure mmx mm entre la cupide et la cuspide
+(Note la mesure du segment 0 nécessite de se positionner strictement perpendiculaire à son axe cf figure
+2. La mesure de référence du segment 0 correspond à la mesure la plus importante en général de fond de
+sinus à fond de sinus. Les autres mesures doivent être faite perpendiculaire au grand axe du segment )
+La jonction sino tubulaire mesure mmx mm
+Le segment I mesure mmx mm
+La crosse au niveau du tronc artériel brachio céphalique mesure mmx mm
+L’aorte thoracique descendante mesure mmx mm
+Absence / présence d’une anomalie des arches aortique
+Absence / présence d’une anomalie de l’ostium des TSAO
+Absence / présence d’une coarctation aortique
+Optionnel
+Fuite aortique cf IAO
+
+Conclusion: 
+la valve aortique est tricuspide / bicuspide sans fuite valvulaire, le diamètre
+maximal de l’aorte perpendiculaire à son axe est mesuré à mm.
+Recommendations Class Level
+Surgery is indicated in patients who have aortic root aneurysm, with maximal aortic
+diameterc ≥50 mm for patients with Marfan syndrome.
+I C
+Surgery should be considered in patients who have aortic root aneurysm, with
+maximal ascending aortic diameter:
+•≥45 mm for patients with Marfan syndrome with risk factors “
+•≥50 mm for patients with bicuspid valve with risk factors.
+•≥55 mm for other patients with no elastopathy.

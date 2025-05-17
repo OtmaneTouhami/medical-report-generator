@@ -1,0 +1,29 @@
+TITRE: 
+IRM MAMMAIRE
+
+Indication: 
+Bilan
+
+Technique: 
+Séquences axiales T1, T2, STIR.
+Dynamiques T1 Fat Sat avant et après injection du Gadolinium pendant 7 min + soustraction.
+Sagittale THRIVE après Gadolinium.
+
+Incidences: 
+
+Résultat: 
+Seins de densité de type
+Rehaussement matriciel de fond : modéré, non gênant.
+
+Sein droit :
+Absence de masse ou de rehaussement non masse.
+Absence de distorsion.
+
+Sein gauche :
+Absence de masse ou de rehaussement non masse.
+Absence de distorsion.
+
+Conclusion: 
+Absence de lésion suspecte.
+ACR .. à droite.
+ACR .. à gauche.

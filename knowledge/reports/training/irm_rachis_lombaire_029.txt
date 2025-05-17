@@ -1,0 +1,30 @@
+TITRE: 
+IRM DU RACHIS LOMBAIRE
+
+CONTEXTE:
+Bilan
+
+Indication: 
+
+Technique: 
+Séquences : sagittale T1 – sagittale T2 – axiale T2
+
+Incidences: 
+
+Résultat: 
+Pas d’anomalie de la statique rachidienne sur cet examen réalisé en décubitus dorsal.
+Projection du cône médullaire en T12-L1
+Respect de la hauteur des corps vertébraux.
+Pas d’anomalie constitutionnelle du calibre du canal rachidien.
+Pas de signal osseux péjoratif.
+Pas d’anomalie de trophicité musculaire.
+
+À l’étage T12-L1 : disque en place, pas d’anomalie du signal discal. Pas d’arthrose inter-apophysaire postérieure. Foramens de conjugaison libres.
+À l’étage L1-L2 : disque en place, pas d’anomalie du signal discal. Pas d’arthrose inter-apophysaire postérieure. Foramens de conjugaison libres.
+À l’étage L2-L3 : disque en place, pas d’anomalie du signal discal. Pas d’arthrose inter-apophysaire postérieure. Foramens de conjugaison libres.
+À l’étage L3-L4 : disque en place, pas d’anomalie du signal discal. Pas d’arthrose inter-apophysaire postérieure. Foramens de conjugaison libres.
+À l’étage L4-L5 : disque en place, pas d’anomalie du signal discal. Pas d’arthrose inter-apophysaire postérieure. Foramens de conjugaison libres.
+À l’étage L5-S1 : disque en place, pas d’anomalie du signal discal. Pas d’arthrose inter-apophysaire postérieure. Foramens de conjugaison libres.
+
+Conclusion: 
+Pas d’anomalie décelée.

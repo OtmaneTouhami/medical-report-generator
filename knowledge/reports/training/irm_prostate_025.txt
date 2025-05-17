@@ -1,0 +1,41 @@
+TITRE: 
+IRM PROSTATIQUE DE DETECTION MULTI-PARAMETRIQUE
+
+Indication: 
+Bilan de détection.
+Taux de PSA :  ng/ml
+Biopsies :
+TR :
+
+Technique: 
+Séquence T2 TSE axiale/sagittale/coronale centrées sur la prostate.
+Séquence T2 pelvienne axiale.
+Séquence de diffusion (b50,b800,b1200) centrées sur la prostate.
+Séquence de perfusion après injection de 10 cc de Chélate de gadolinium.
+
+Incidences: 
+
+Résultat: 
+Volume prostatique estimé à  cc
+ -Cible(s) intra-prostatiques(s) identifiée(s):
+
+-> Lésion cible n°  : de … mm, localisée dans la  zone de transition/zone périphérique au segment …
+
+ Paramètre	Score ESUR 2011	 Remarque
+T2		
+Diffusion		
+Perfusion		
+Total		
+=> PIRADS   :
+I  (3-4) : très probablement bénin
+II (5-6) : probablement bénin
+III (7-9) : indeterminée
+IV (10-12) : probablement malin
+V (13 – 15) : très probablement malin
+
+Signes IRM de franchissement capsulaire :
+Vésicules séminales de morphologie et de signal normal
+Adénomégalies pelviennes :
+
+Conclusion: 
+Lésion

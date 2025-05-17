@@ -1,0 +1,55 @@
+TITRE: 
+IRM CARDIAQUE
+
+Indication: 
+Suspicion de myocardite aigue, 
+
+Technique: 
+Séquences ciné SSFP: en petit axe de la base à l’apex couvrant le VG, 2 cavité et 4cavités VG,
+sequences T2 fast sat.
+Séquence de rehaussement tardif après injection de gadolinium.
+La dose de gadolinium peut varier entre 0,1et 0,2 mmol/kg. En cas de simple dose un délai
+inférieur à 10min peut être utilisé pour la réalisation des séquences.
+Optionnels
+Séquences de cartographie paramétrique avec T1 et T2 mapping et cartographie ECV
+Séquences ciné après injection de gadolinium
+
+Incidences: 
+
+Résultat: 
+Analyse quantitative de la cinétique:
+Paramètres VG
+FEVG %
+VTDVG ml/m2
+VTSVG ml/m2
+Masse myocardique g/m2
+L’analyse qualitative de la cinétique segmentaire du ventricule gauche met/ ne met pas en
+évidence : d’hypokinésie, d’akinésie, de dyskinésie, localisé au niveau de la paroi
+Figure 1 : rappel de la segmentation myocardique du ventricule gauche à 17 segments d’après Cerqueira
+et al ; Circulation 2002.
+Sur les séquences T2 on note / ne note pas d’ hypersignal de la paroi myocardique du VG
+localisé au niveau sous épicardique, transmural, sous endocardique dans les segments ……. en
+faveur du caractères aigue de l’affection.
+Sur les séquences de rehaussement tardif on retrouve, ne retrouve pas de prise de contraste
+localisée au niveau sous épicardique, sous endocardique, transmural dans les segments …..
+Figure 2 exemple de séquences T2 FS à gauche et de rehaussement tardif à droite mettant en évidence
+une myocardites aigues d’origine virale. On note sur la séquence T2 FS la présence d’un hypersignal
+myocardique témoignant d’un œdème myocardique localisé au niveau de la paroi latérale du myocarde
+du VG. Sur l’image en rehaussement tardif on note une prise de contraste sous epicardique. Absence
+d’épanchement péricardique.
+Figure 3 : exemple d’un patient adressé pour un syndrome coronaire aigu à coronaires saines et chez qui
+l’IRM permet le diagnostic d’infarctus du myocarde. On note la présence d’une prise de contraste sous
+endocardique localisé dans le territoire inférieur.
+Optionnel
+La valeur du T1 natif dans les zones normales est mesurée à : ms, et à ms dans les zones
+pathologiques
+La valeur du T2 dans les zones normales est mesurée à : ms, et à ms dans les zones
+pathologiques
+La valeur de l’ECV dans les zones normales est mesurée à : , et à dans les zones
+pathologiques
+Sur les séquences de cine post gadolinium on retrouve, ne retrouve pas de prise de contraste
+localisé au niveau sous épicardique, sous endocardique, transmural dans les segments ….. 
+
+Conclusion: 
+Présence / Absence de signe en faveur d'une myocardite aigue. Pas de signe en
+faveur d’un infarctus à coronaires saines

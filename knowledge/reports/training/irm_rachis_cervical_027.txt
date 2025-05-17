@@ -1,0 +1,33 @@
+TITRE: 
+IRM DU RACHIS CERVICAL
+
+CONTEXTE:
+Bilan
+
+Indication: 
+
+Technique: 
+IRM 1,5 T
+Séquences sagittales T1, T2 et axiales T2 sur le rachis cervical
+
+Incidences: 
+
+Résultat: 
+Pas d’anomalie de la statique rachidienne sur cet examen réalisé en décubitus dorsal.
+Respect de hauteur des corps vertébraux.
+Respect de la ligne spino-lamellaire.
+Pas d’anomalie constitutionnelle du calibre du canal rachidien.
+Pas d’anomalie du signal du cordon médullaire ou du LCR.
+Pas d’anomalie de la charnière cervico-occipitale.
+Pas de signal osseux péjoratif.
+Pas d’anomalie de trophicité musculaire.
+
+À l’étage C2-C3 : disque en place, pas d’anomalie du signal discal. Pas d’arthrose inter-apophysaire postérieure. Foramens de conjugaison libres.
+À l’étage C3-C4 : disque en place, pas d’anomalie du signal discal. Pas d’arthrose inter-apophysaire postérieure. Foramens de conjugaison libres.
+À l’étage C4-C5 : disque en place, pas d’anomalie du signal discal. Pas d’arthrose inter-apophysaire postérieure. Foramens de conjugaison libres.
+À l’étage C5-C6 : disque en place, pas d’anomalie du signal discal. Pas d’arthrose inter-apophysaire postérieure. Foramens de conjugaison libres.
+À l’étage C6-C7 : disque en place, pas d’anomalie du signal discal. Pas d’arthrose inter-apophysaire postérieure. Foramens de conjugaison libres.
+À l’étage C7-Th1 : disque en place, pas d’anomalie du signal discal. Pas d’arthrose inter-apophysaire postérieure. Foramens de conjugaison libres.
+
+Conclusion:
+Pas d’anomalie décelée.

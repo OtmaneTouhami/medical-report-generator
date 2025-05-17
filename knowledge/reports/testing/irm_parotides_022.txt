@@ -1,0 +1,24 @@
+TITRE: 
+IRM DES PAROTIDES
+
+Indication: 
+Bilan de tuméfaction parotidienne
+
+Technique: 
+Séquences avant injection de contraste coronales STIR, axiales T1, axiales T2, axiales diffusion.
+Injection de contraste puis séquences coronales T1 dynamiques, axiales et coronales T1 après saturation du signal de la graisse.
+
+Incidences: 
+
+Résultat: 
+Les deux parotides sont de taille normale.
+Signal homogène.
+Quelques ganglions intraparotidiens sans caractéristique péjorative.
+Pas de dilatation des canaux salivaires.
+Pas d’image tumorale suspecte retrouvée.
+
+Glandes sous maxillaires sans particularité.
+Pas d’adénopathie décelée.
+
+Conclusion: 
+Pas d’image suspecte intraparotidienne.

@@ -1,0 +1,29 @@
+TITRE: 
+IRM ENCÉPHALIQUE
+
+CONTEXTE:
+Surveillance de sclérose en plaque
+
+Indication: 
+
+Technique: 
+– Séquences avant injection de produit de contraste gadoliné : 3DFLAIR, axiale T2, axiale diffusion, axiale T1
+– Séquences après injection de produit de contraste gadoliné : axiale T1
+
+Incidences: 
+
+Résultat: 
+Examen recalé et comparé à celui réalisé le ,
+
+Multiples lésions en hypersignal FLAIR périventriculaires, ovalaires, perpendiculaires au plan des ventricules, atteignant le corps calleux.
+Présence de lésions infra tentorielles.
+Présence de black hole.
+Absence de prise de contraste lésionnelle visible.
+Trophicité cérébrale conservée.
+
+Structures médianes en place.
+Pas d’hypersignal de diffusion du parenchyme cérébral.
+
+Conclusion: 
+Stabilité de la charge lésionnelle.
+Pas de lésion active se rehaussant décelée

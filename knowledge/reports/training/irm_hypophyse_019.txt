@@ -1,0 +1,27 @@
+TITRE: 
+IRM HYPOPHYSAIRE
+
+CONTEXTE:
+Bilan
+
+Indication: 
+
+Technique: 
+IRM  Tesla
+– Séquences avant injection de produit de contraste : coronales T1, T2, sagittale T1 sur la région hypophysaire
+– Séquences après injection de produit de contraste : coronale T1 (dynamiques et tardives)
+
+Incidences: 
+
+Résultat: 
+Antéhypophyse de taille et de morphologie normales, de signal homogène
+Pas d’anomalie focale après injection de gadolinium
+Post-hypophyse en hypersignal spontané T1, d’aspect normal
+Respect du diaphragme et du plancher sellaire
+Pas d’anomalie des loges caverneuses
+Intégrité des citernes supra-sellaires et opto-chiasmatiques
+Bonne aération du sinus sphénoïdal
+Chiasma optique d’aspect normal
+
+Conclusion: 
+IRM hypophysaire normale

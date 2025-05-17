@@ -1,0 +1,21 @@
+TITRE: 
+ENTERO-IRM
+
+Indication: 
+Bilan
+
+Technique: 
+T2, diffusion, T1 après injection de gadolinium.
+
+Incidences: 
+
+Résultat: 
+Qualité de la distension du grêle : mauvaise / moyenne / bonne
+
+Absence d’épaississement pariétal.
+Pas de prise de contraste anormale du grêle ou du colon.
+Pas d’anomalie du péristaltisme.
+Absence d’anomalie extra-pariétale.
+
+Conclusion: 
+Entéro IRM normale.

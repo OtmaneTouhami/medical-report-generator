@@ -28,9 +28,8 @@ def create_word_document(report_text: str, filename: str = "radiology_report.doc
     font.name = "Calibri"
     font.size = Pt(11)
 
-    # Regex to remove markdown code block fences, including 'french'
     cleaned_text = re.sub(
-        r"^\\s*```(?:json|text|french)?\\s*[\\r\\n]*(.*?)\\s*```\\s*$",
+        r"^\\s*```(?:json|text|french)?\\s*[\\r\\n]*(.*?)\\s*```\\s*$\"",
         r"\\1",
         report_text,
         flags=re.DOTALL | re.IGNORECASE,
@@ -43,7 +42,6 @@ def create_word_document(report_text: str, filename: str = "radiology_report.doc
 
     if lines:
         first_line = lines[0].strip()
-        # Case insensitive check for TITRE, supporting French output
         if first_line.upper().startswith("TITRE:"):
             title_content = (
                 first_line.split(":", 1)[1].strip()
@@ -52,13 +50,11 @@ def create_word_document(report_text: str, filename: str = "radiology_report.doc
             )
             lines_for_sections = lines[1:]
 
-    # Add the extracted or default title
     title_paragraph = document.add_paragraph(title_content)
     title_paragraph.style = document.styles["Heading 1"]
     title_paragraph.alignment = WD_PARAGRAPH_ALIGNMENT.CENTER
-    document.add_paragraph()  # Add a blank line after the title
+    document.add_paragraph()
 
-    # --- Improved Section Parsing ---
     section_headers_list = [
         "Indication:",
         "Technique:",
@@ -70,7 +66,6 @@ def create_word_document(report_text: str, filename: str = "radiology_report.doc
     current_section_header = None
     current_section_content = []
 
-    # Improved section parsing for potentially multi-line content within sections
     for line_idx, line_text in enumerate(lines_for_sections):
         stripped_line = line_text.strip()
         found_new_header = False
@@ -89,7 +84,6 @@ def create_word_document(report_text: str, filename: str = "radiology_report.doc
         if line_idx == len(lines_for_sections) - 1 and current_section_header:
             report_sections_data[current_section_header] = "\n".join(current_section_content).strip()
 
-    # Add sections to the document in the defined order
     for header in section_headers_list:
         content = report_sections_data.get(header, "").strip()
         paragraph = document.add_paragraph()
@@ -98,9 +92,12 @@ def create_word_document(report_text: str, filename: str = "radiology_report.doc
         paragraph.add_run(" ")
         
         if content and content != "-" and content.upper() != "NÉANT":
-            paragraph.add_run(content)
+            for part in content.split('\n'):
+                paragraph.add_run(part)
+                paragraph.add_run('\n').font.size = Pt(1)
         else:
             paragraph.add_run("Néant")
+
         document.add_paragraph()
 
     try:
@@ -118,7 +115,6 @@ def run():
     print("## Équipe de Génération de Compte Rendu Médical")
     print("-------------------------------")
 
-    # Using the French input example for endometriosis
     raw_medical_input = """
 Patiente de 38 ans, adressée pour bilan de douleurs pelviennes chroniques avec dysménorrhée et dyspareunie profondes. Suspicion d'endométriose.
 Antécédents : RAS.
@@ -136,37 +132,26 @@ Pas d'atteinte digestive ou urinaire évidente sur cet examen (limites de la tec
 Conclusion : Quelques petits implants d'endométriose superficielle visibles au niveau du cul-de-sac de Douglas et du ligament utéro-sacré gauche. Pas de signe d'endométriose profonde ou d'endométriome sur cet examen.
     """
 
-    # Define the inputs for the first task
     inputs = {"raw_input": raw_medical_input}
 
-    # Instantiate the Crew using the CrewBase class, passing the LLM
     try:
         crew_generator = MedicalReportGenerator()
         crew = crew_generator.crew()
-
-        # Kick off the crew process
         print("\nDémarrage du processus de l'équipe...")
-        # Call str() on the result to get the final text output
         result = str(crew.kickoff(inputs=inputs))
         print("\nProcessus de l'équipe terminé.")
-
         print("\n## Texte du Compte Rendu Généré:")
         print(result)
         print("-------------------------------")
-
-        # Generate the .doc file from the final report text
         create_word_document(result, filename="radiology_report.docx")
-
     except Exception as e:
-        # Print a more informative error message including the exception type
         print(
             f"\nUne erreur s'est produite lors de l'exécution de l'équipe ou de la génération du document : {type(e).__name__}: {e}",
             file=sys.stderr,
         )
-        sys.exit(1)  # Exit with a non-zero code to indicate an error
+        sys.exit(1)
 
 
-# Keep the other functions as placeholders
 def train():
     """
     Train the crew for a given number of iterations.
@@ -210,6 +195,7 @@ def test():
         sys.exit(1)
 
     test_files = list(test_reports_path.glob("*.txt"))
+
     if not test_files:
         print(f"Erreur : Aucun fichier de test trouvé dans {test_reports_path}")
         sys.exit(1)
@@ -224,33 +210,34 @@ def test():
         prompt_input = ""
         lines = ground_truth_report_text.splitlines()
         capture = False
-        # Extract "Indication:" section as prompt, case-insensitive, for French
         for line in lines:
             stripped_line = line.strip()
             if stripped_line.upper().startswith("INDICATION:"):
                 prompt_input += stripped_line[len("INDICATION:"):].strip() + " "
                 capture = True
             elif capture and not any(sh.upper() in stripped_line.upper() for sh in ["TECHNIQUE:", "INCIDENCES:", "RÉSULTAT:", "CONCLUSION:"]):
-                if stripped_line: prompt_input += stripped_line + " "
+                if stripped_line:
+                    prompt_input += stripped_line + " "
             elif capture and any(sh.upper() in stripped_line.upper() for sh in ["TECHNIQUE:", "INCIDENCES:", "RÉSULTAT:", "CONCLUSION:"]):
                 break
+        
         prompt_input = prompt_input.strip()
 
         if not prompt_input:
-            print(f"Avertissement : Impossible d'extraire l'indication pour {selected_test_file.name}. Utilisation d'une invite générique.")
-            prompt_input = "Patiente consultant pour des douleurs pelviennes et suspicion d'endométriose." # Generic French fallback
+            print(f"Avertissement : Impossible d'extraire l'indication comme invite pour {selected_test_file.name}. Utilisation du contenu complet comme pis-aller.")
+            prompt_input = "Patiente consultant pour des douleurs pelviennes."
 
         print(f"\nInvite générée pour l'équipe :\n{prompt_input}")
         print("-------------------------------")
 
         inputs = {"raw_input": prompt_input}
-        # Use the full crew for testing
         crew_generator = MedicalReportGenerator()
         crew = crew_generator.crew()
 
         print("\nDémarrage du processus de l'équipe pour le test...")
         generated_report_text = str(crew.kickoff(inputs=inputs))
         print("\nProcessus de l'équipe de test terminé.")
+
         print("\n## Texte du Compte Rendu Généré (Test):")
         print(generated_report_text)
         print("-------------------------------")
@@ -261,13 +248,13 @@ def test():
         create_word_document(generated_report_text, filename=str(generated_report_filename_docx))
         
         with open(generated_report_filename_txt, "w", encoding="utf-8") as f:
-            f.write("--- INVITE UTILISÉE ---\n")
+            f.write("-- PROMPT INPUT ---\n")
             f.write(prompt_input + "\n\n")
-            f.write("--- COMPTE RENDU GÉNÉRÉ ---\n")
+            f.write("-- GENERATED REPORT ---\n")
             f.write(generated_report_text + "\n\n")
-            f.write("--- COMPTE RENDU DE RÉFÉRENCE (GROUND TRUTH) ---\n")
+            f.write("-- GROUND TRUTH REPORT ---\n")
             f.write(ground_truth_report_text)
-        print(f"Rapport de test (comparaison) sauvegardé en .txt : {generated_report_filename_txt}")
+        print(f"Rapport de test généré également sauvegardé en .txt : {generated_report_filename_txt}")
 
         print("\n## Comparaison (Manuelle pour l'instant):")
         print(f"Rapport original (vérité terrain) : {selected_test_file.name}")
@@ -298,4 +285,4 @@ if __name__ == "__main__":
             print("Commandes disponibles : run, test, train, replay")
     else:
         print("Aucune commande fournie. Exécution de la commande 'run' par défaut.")
-        run()  # Default command
+        run()

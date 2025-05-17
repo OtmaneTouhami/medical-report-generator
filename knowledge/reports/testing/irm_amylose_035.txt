@@ -1,0 +1,48 @@
+TITRE: 
+IRM CARDIAQUE 
+
+Indication: 
+Suspicion amylose cardiaque
+
+Technique: 
+Séquences ciné SSFP: en petit axe de la base à l’apex couvrant le VG, 2 cavités et 4 cavités VG,
+LVOT1,
+Séquence de rehaussement tardif après injection de gadolinium.
+La dose de gadolinium peut varier entre 0,1et 0,2 mmol/kg. En cas de simple dose un délai
+inférieur à 10min peut être utilisé pour la réalisation des séquences.
+Optionnels
+Séquences de cartographie paramétrique avec T1 natif, T2 mapping et cartographie ECV
+
+Incidences: 
+
+Résultat:
+Analyse quantitative de la cinétique:
+Paramètres VG
+FEVG %
+VTDVG ml/m2
+VTSVG ml/m2
+Masse myocardique g/m2
+Mesure du racourcissement longitudinale en 4 cavités est inférieur à 10mm
+(normal=20mm)
+L’épaisseur maximale de la paroi du VG sur les coupes petit axe en télédiastole (ne pas mesurer
+les trabéculations VG ou VD) est mesuré à mm
+On note une hypertrophie / pas d’hypertrophie du ventricule droit.
+On note une hypertrophie / pas d’hypertrophie des oreillettes
+Le volume de l’oreillette gauche est mesuré à 
+Figure 2 : illustrant la manière de mesurer la taille de l’OG. Volume de l’oreillette gauche=
+0,85*(A1xA2)/L (L mesure la plus petite des deux)
+On note la présence / l’absence d’un épanchement péricardique
+On note la présence / l’absence d’un épanchement pleural
+On note la présence / l’absence de prise de contraste diffuse / medio-pariétale/ sous endocardique
+circonférentiel du ventricule gauche
+On note la présence / l’absence de prise de contraste du ventricule droit, du massif atrial
+On note la présence / l’absence de prise de contraste diffuse du septum inter atrial
+On note la présence / l’absence de thrombus dans les auricules
+Optionnel
+La valeur du T1 natif dans les zones normales est mesurée à : ms, et à ms dans les zones
+pathologiques. L’augmentation du T1 peut être en faveur d’une amylose.
+La valeur de l’ECV dans les zones normales est mesurée à : , et à dans les zones
+pathologiques 
+
+Conclusion: 
+aspect évocateur / non évocateur en faveur du diagnostic de cardiopathie amyloïde

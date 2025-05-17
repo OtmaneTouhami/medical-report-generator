@@ -1,0 +1,26 @@
+TITRE: 
+IRM PELVIENNE
+
+Indication: 
+Métrorragies post-ménopausiques, bilan d’extension loco-régional d’un cancer endométrial.
+
+Technique: 
+Séquences axiale et sagittale strict, axiale T1, axiale T2 perpendiculaire au corps, diffusion axiale et QBTFE sur l’abdomen jusqu’aux hiles rénaux, sagittale dynamique gadolinium pendant 2,30 mn puis ax T1 gado (Thrive iso).
+
+Incidences: 
+
+Résultat: 
+Masse endométriale mesurant … cm.
+
+En discret hypersignal T2 et hypersignal diffusion.
+Envahissement myométrial de …., séreuse respectée.
+Pas d’envahissement du corps ou de l’isthme utérin.
+Respect de la vessie et du rectum.
+Absence d’adénomégalie pelvienne ou lombo-aortique.
+
+L’utérus est par ailleurs antéversé et antéfléchi de taille normale pour l’âge : … cm de hauteur, … cm d’épaisseur et … cm de largeur.
+Ovaires atrophiques sans masse visible.
+Pas d’épanchement liquidien.
+
+Conclusion: 
+…

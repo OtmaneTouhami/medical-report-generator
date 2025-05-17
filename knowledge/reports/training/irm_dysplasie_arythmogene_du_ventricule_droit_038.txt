@@ -1,0 +1,45 @@
+TITRE: 
+IRM CARDIAQUE 
+
+Indication: 
+Recherche d'argument en faveur d'une cardiomyopathie arrythmogène du ventricule droit (CAVD). 
+
+Technique: 
+Séquences ciné SSFP: en petit axe de la base à l’apex couvrant les deux ventricules, 2 cavité VG,
+VD et 4cavités, RVOT.
+Séquences optionnelles : sequences T1 fast spin echo sans et avec fat-sat en axial ou petit axe.
+Séquence de rehaussement tardif après injection de gadolinium. 
+
+Incidences: 
+
+Résultat: 
+Analyse quantitative de la cinétique:
+Paramètres VD :
+FEVD : %
+VTDVD : ml/m2
+VTSVD : ml/ m2
+Figure 1 : recommandation pour le contourage endocardique sur des coupes ciné axiale
+(partie gauche) et petit axe (partie droite) issue De Schulz-Menger et al. JCMR 2013
+Paramètres VG
+FEVG
+VTDVG
+VTSVG
+Masse myocardique
+L’analyse qualitative de la cinétique segmentaire du ventricule droit met/ ne met pas en
+évidence : d’akinésie, de dyskinésie, d’asynchronisme de contraction
+Localisé au niveau de la paroi latérale, l’infundibulum, l’apex, la base, la paroi inférieure.
+Figure 2 et 3 Rappel des critères diagnostique en IRM de la CAVD d’après Marcus et al. Eur
+Heart J 2010.
+Figure 2 : Critère majeur
+Figure 3 : Critère mineur
+Optionnel : Recherche de graisse et ou de fibrose sur les zones de contractilité anormale en
+Ciné.
+Infiltration graisseuse localisé au niveau de la paroi latérale, l’infundibulum, l’apex, la base, la
+paroi inférieure du VD.
+Infiltration graisseuse localisé au niveau du segment ….. du VG.
+Rehaussement tardif localisé au niveau de la paroi latérale, l’infundibulum, l’apex, la base, la
+paroi inférieure du VD.
+Rehaussement tardif localisé au niveau du segment ….. du VG.
+
+Conclusion: 
+Absence de critère majeur ou mineur en faveur d'une CAVD. 

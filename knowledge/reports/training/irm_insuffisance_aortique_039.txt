@@ -1,0 +1,72 @@
+TITRE: 
+IRM CARDIAQUE et AORTIQUE
+
+Indication: 
+Bilan d’une insuffisance aortique
+
+Technique: 
+Séquences ciné SSFP: en petit axe de la base à l’apex couvrant le VG, 2 cavité et 4cavités VG,
+LVOT 1, LVOT 2, plan de valves couvrant de l’anneau à la jonction sino tubulaire.
+Sequence en contraste de phase à travers le plan, perpendiculaire à l’aorte au niveau de la
+jonction sino tubulaire la vitesse d’encodage a été adapté au patient
+Séquence 3D sang blanc avec gating respiratoire centré sur l’aorte ascendante la crosse et
+l’aorte thoracique descendante
+Optionnels
+SSFP single shot axial strict couvrant tout le thorax
+4D Flow
+
+Incidences: 
+
+Résultat: 
+Caractérisation de la valve aortique
+La valve aortique est tricuspide, sans fuite
+La valve aortique est bicuspide avec une bicuspidie de type . (note : la recherche d’une
+bicuspidie ce fait en systole)
+Figure 1 : Classification des bicuspidies aortiques d’après Sievert et al Thorac Cardiovasc Surj 2007.
+Caractérisation de la fuite aortique
+On note la présence / l’absence de de fuite valvulaire aortique. L’origine de la fuite est secondaire
+à une dilatation de la jonction sino-tubulaire / une anomalie de la valve aortique. La fraction de
+régurgitation valvulaire aortique est mesuré à %, volume régurgité par battement mesuré à
+ml, 
+Répercution de la fuite sur le VG
+FEVG %
+VTDVG ml/m2
+VTSVG ml/m2
+Masse myocardique g/m2
+Le débit cardiaque est mesuré
+Synthèse de la quantification de l’IAO
+Iao sévére si : fraction de régurgitation > 35-40%, volume régurgité > 40-50ml (note les seuils sont
+encore imprecis les fourchettes proposés le sont à titre indicatifs. Pour les IA sévére chez les patients
+assymptomatique une fraction d’ejection inférieure à 50% et un volume télédiastolique > 135ml/m2 sont
+des signes de gravités)
+Caractérisation des diamètres aortiques
+Figure 2 : recommandation pour la mesure des diamètres du segment 0 Lang R et al. J Am Soc
+Echocardiogr 2015.
+Le segment 0 mesure mmx mm entre la cupide et la cuspide
+(Note la mesure du segment 0 nécessite de se positionner strictement perpendiculaire à son axe cf figure
+2. La mesure de référence du segment 0 correspond à la mesure la plus importante en général de fond de
+sinus à fond de sinus. Les autres mesures doivent être faite perpendiculaire au grand axe du segment )
+La jonction sino tubulaire mesure mmx mm
+Le segment I mesure mmx mm
+La crosse au niveau du tronc artériel brachio céphalique mesure mmx mm
+L’aorte thoracique descendante mesure mmx mm
+Absence / présence d’une anomalie des arches aortique
+Absence / présence d’une anomalie de l’ostium des TSAO
+Absence / présence d’une coarctation aortique
+Optionnel
+Fuite aortique cf IAO
+
+Conclusion: 
+la valve aortique est tricuspide / bicuspide sans fuite valvulaire, le diamètre
+maximal de l’aorte perpendiculaire à son axe est mesuré à mm. La fuite valvulaire aortique est
+minime / modéré / sévère
+Recommendations Class Level
+Surgery is indicated in patients who have aortic root aneurysm, with maximal aortic
+diameterc ≥50 mm for patients with Marfan syndrome.
+I C
+Surgery should be considered in patients who have aortic root aneurysm, with
+maximal ascending aortic diameter:
+•≥45 mm for patients with Marfan syndrome with risk factors “
+•≥50 mm for patients with bicuspid valve with risk factors.
+•≥55 mm for other patients with no elastopathy.
+IIa C 

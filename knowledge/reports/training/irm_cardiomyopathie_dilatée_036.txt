@@ -1,0 +1,54 @@
+TITRE: 
+IRM CARDIAQUE 
+
+Indication: 
+Bilan d’une baisse de la fraction d’éjection
+
+Technique: 
+Séquences ciné SSFP: en petit axe de la base à l’apex couvrant le VG, 2 cavités et 4cavités VG,
+LVOT 1.
+Séquence de rehaussement tardif après injection de gadolinium.
+La dose de gadolinium peut varier entre 0,1et 0,2 mmol/kg. En cas de simple dose un délai
+inférieur à 10min peut être utilisé pour la réalisation des séquences.
+Optionnels
+Séquences de cartographie paramétrique avec T1 et T2 mapping et cartographie ECV
+
+Incidences: 
+
+Résultat: 
+Analyse quantitative de la cinétique :
+Paramètres VG
+FEVG %
+VTDVG ml/m2
+VTSVG ml/m2
+Masse myocardique g/m2
+Paramètres VD :
+FEVD : %
+VTDVD : ml/m2
+VTSVD : ml/ m2
+L’analyse qualitative de la cinétique segmentaire du ventricule gauche met/ ne met pas en
+évidence : d’hypokinésie, d’akinésie, de dyskinésie, localisé au niveau de la paroi
+Figure 1 : rappel de la segmentation myocardique du ventricule gauche à 17 segments d’après Cerqueira
+et al ; Circulation 2002.
+On note la présence / l’absence d’un asynchronisme de contraction entre le septum et la paroi
+latérale du ventricule gauche.
+Le volume de l’oreillette gauche est mesuré à .
+Figure 2 : illustrant la manière de mesurer la taille de l’OG. Volume de l’oreillette gauche=
+0,85*(A1xA2)/L (L mesure la plus petite des deux)
+Sur les séquences de rehaussement tardif on retrouve, ne retrouve pas de prise de contraste
+localisée au niveau de l’épaisseur du septum inter ventriculaire.
+On retrouve / on ne retrouve pas de prise de contraste sous endocardique localisé dans le
+territoire de IVA / CX / CD évoquant une séquelle d’infarctus.
+On note la présence / l’absence de thrombus intra VG mesurant mm localisé au niveau de .
+On note la présence / l’absence de fuite mitrale d’origine fonctionnelle
+Optionnel
+La valeur du T1 natif dans les zones normales est mesurée à : ms, et à ms dans les zones
+pathologiques
+La valeur du T2 dans les zones normales est mesurée à : ms, et à ms dans les zones
+pathologiques
+La valeur de l’ECV dans les zones normales est mesurée à : , et à dans les zones
+pathologiques
+
+Conclusion: 
+Baisse de la FEVG avec / sans dilatation du VG évoquant le diagnostic de
+cardiomyopathie dilaté

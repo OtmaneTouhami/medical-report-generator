@@ -1,0 +1,45 @@
+TITRE: 
+ENTERO-IRM
+
+Indication: 
+Suivi d’une maladie de Crohn iléale traitée par
+
+Technique: 
+Séquences axiale et frontale B FFE, diffusion, frontale T2 single shot SPAIR, axiale T1, frontale T1, après injection dynamique de gadolinium, axiale à 2 mn, puis frontale à 5 mn.
+
+Incidences: 
+
+Résultat: 
+Qualité de la distension du grêle : mauvaise / moyenne / bonne
+
+Comparaison avec l’entéro-IRM effectuée en …
+
+Anomalies pariétales
+
+Description rétrograde à partir de la valvule iléo-caecale :
+– 1ère sténose de  …  mm d’épaisseur, étendue sur … cm de longueur, avec signes d’activité probable (épaisseur de … mm ; hypersignal pariétal T2, prise de contraste muqueuse et signe du peigne).
+Dilatation pré sténotique (lumière de … mm de calibre) sur … cm de longueur.
+
+– 2ème sténose de  …  mm d’épaisseur, étendue sur … cm de longueur, avec signes d’activité probable (épaisseur de … mm ; hypersignal pariétal T2, prise de contraste muqueuse et signe du peigne).
+Dilatation pré sténotique (lumière de … mm de calibre) sur … cm de longueur.
+
+Absence d’ulcération transmurale évidente
+
+Anomalies extra-pariétales
+Absence de fistule, de collection.
+Plusieurs petits ganglions mésentériques péri-vasculaires, le plus volumineux mesurant … mm et se rehaussant
+
+Fistules :
+Masse inflammatoire :
+Abcès :
+Hypervascularisation du mésentère :
+Sclérolipomatose :
+Ganglions :
+
+Autres atteintes
+Atteinte du cadre colique  :
+Atteinte à distance d’autres anses grêles :
+
+Conclusion: 
+Examen globalement stable.
+Sténoses avec persistance de signe d’activité. Absence de complication extradigestive.

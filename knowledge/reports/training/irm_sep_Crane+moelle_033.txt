@@ -1,0 +1,46 @@
+TITRE: 
+IRM ENCÉPHALIQUE ET MEDULLAIRE
+
+CONTEXTE:
+Surveillance de sclérose en plaque
+
+Indication: 
+
+Technique: 
+Encéphale,
+– Séquences avant injection de produit de contraste gadoliné : 3DFLAIR, axiale T2, axiale diffusion, axiale T1
+– Séquences après injection de produit de contraste gadoliné : axiale T1
+ 
+Moelle,
+– Séquences avant injection de contraste : sagittale T1, sagittale T2, axiale T2
+– Séquences près injection de contraste : sagittale T1, axiale T1 après suppression du signal de la graisse
+
+Incidences: 
+
+Résultat: 
+Examen recalé et comparé à celui réalisé le ,
+ 
+Encéphale,
+Multiples lésions en hypersignal FLAIR périventriculaires, ovalaires, perpendiculaires au plan des ventricules, atteignant le corps calleux.
+Présence de lésions infra tentorielles.
+Présence de black hole.
+Absence de prise de contraste lésionnelle visible.
+Trophicité cérébrale conservée.
+Structures médianes en place.
+Pas d’hypersignal de diffusion du parenchyme cérébral.
+ 
+Moelle,
+Pas d’anomalie de la statique rachidienne sur cet examen réalisé en décubitus dorsal.
+Respect de hauteur des corps vertébraux.
+Respect de la ligne spino-lamellaire.
+Pas d’anomalie constitutionnelle du calibre du canal rachidien.
+Pas d’anomalie du signal du cordon médullaire ou du LCR.
+Disques en place
+Pas d’anomalie du signal discal
+Pas d’arthrose inter-apophysaire postérieure
+Foramens de conjugaison libres.
+Pas d’anomalie de trophicité musculaire.
+
+Conclusion: 
+Stabilité de la charge lésionnelle.
+Pas de lésion active se rehaussant décelée.

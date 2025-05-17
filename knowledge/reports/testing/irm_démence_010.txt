@@ -1,0 +1,36 @@
+TITRE: 
+IRM ENCÉPHALIQUE
+
+CONTEXTE:
+Bilan de déclin cognitif.
+
+Indication: 
+
+Technique:
+– Séquences axiales : diffusion, FLAIR, T2*
+– Séquences 3D : T1-IR (en écho de gradient) 
+
+Incidences: 
+
+Résultat: 
+Structures médianes en place.
+
+Pas d’anomalie du signal FLAIR du parenchyme cérébral sus ou sous tentoriel.
+Quelques hypersignaux FLAIR de la substance blanche péri-ventriculaire, non confluents, aspécifiques.
+Fazekas modifié :  0
+
+Pas d’anomalie de trophicité cérébrale.
+Atrophie cortico-sous-corticale diffuse, homogène, modérée, sans prédominance lobaire.
+Trophicité hippocampique :
+
+Scheltens 0 à droite
+Scheltens 0 à gauche
+Pas de stigmates hémorragiques intra ou extra axiaux en pondération T2*.
+Pas d’hypersignal de diffusion du parenchyme cérébral.
+Pas d’hydrocéphalie.
+
+Conclusion: 
+Examen normal.
+
+Pas de leucopathie vasculaire.
+Pas d’atrophie cérébrale notable.

@@ -1,0 +1,22 @@
+TITRE: 
+IRM ENCEPHALIQUE
+
+CONTEXTE:
+Recherche d’organicité.
+
+Indication: 
+
+Technique: 
+– Séquence axiale : FLAIR
+– Séquences 3D : T1 (en écho de gradient)
+
+Incidences: 
+
+Résultat:
+Structures médianes en place.
+Pas d’anomalie du signal FLAIR du parenchyme cérébral sus ou sous tentoriel.
+Pas d’anomalie morphologique évidente visualisée.
+Pas d’hydrocéphalie.
+
+Conclusion:
+Examen normal.
