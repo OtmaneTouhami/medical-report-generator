@@ -12,6 +12,8 @@ from .database import Base, get_db, engine
 
 Base.metadata.create_all(bind=engine)
 
+project_root = Path(__file__).resolve().parent.parent
+
 app = FastAPI()
 
 api_router = APIRouter(prefix="/api/v1")
@@ -59,7 +61,6 @@ async def download_report(report_id: int, db: Session = Depends(get_db)):
             status_code=404, detail="Report file not available for download"
         )
 
-    project_root = Path(__file__).resolve().parent.parent
     file_path = project_root / report.generated_report_path
 
     if not file_path.is_file():
@@ -71,5 +72,36 @@ async def download_report(report_id: int, db: Session = Depends(get_db)):
         media_type="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
     )
 
+@api_router.delete("/reports/{report_id}")
+async def delete_report(report_id: int, db: Session = Depends(get_db)):
+    report = db.query(Report).filter(Report.id == report_id).first()
+    if not report:
+        raise HTTPException(status_code=404, detail="Report not found")
+
+    if report.generated_report_path:
+        file_path = project_root / report.generated_report_path
+        
+        if file_path.is_file():
+            file_path.unlink()
+
+    db.delete(report)
+    db.commit()
+
+    return {"message": "Report deleted successfully"}
+
+@api_router.delete("/reports")
+async def delete_all_reports(db: Session = Depends(get_db)):
+    reports = db.query(Report).all()
+    for report in reports:
+        if report.generated_report_path:
+            file_path = project_root / report.generated_report_path
+            
+            if file_path.is_file():
+                file_path.unlink()
+
+        db.delete(report)
+    db.commit()
+
+    return {"message": "All reports deleted successfully"}
 
 app.include_router(api_router)
