@@ -18,7 +18,20 @@ The system outputs a professional radiology report in French, in both text and W
 ## Key Features & Recent Enhancements
 
 - **Multi-Agent System**: Leverages multiple specialized AI agents for a modular and robust workflow.
+- **FastAPI Backend & API**:
+    - Exposes report generation and management via a RESTful API built with FastAPI.
+    - All API routes are versioned under `/api/v1/`.
+    - **Endpoints**:
+        - `POST /api/v1/generate`: Accepts a JSON payload with `prompt_text` to generate a new medical report. Returns report metadata including the path to the generated `.docx` file.
+        - `GET /api/v1/reports`: Lists all previously generated reports with their metadata.
+        - `GET /api/v1/reports/{report_id}/download`: Allows downloading of the `.docx` file for a specific report.
+        - `DELETE /api/v1/reports/{report_id}`: Deletes a specific report entry and its associated file.
+        - `DELETE /api/v1/reports`: Deletes all report entries and their associated files.
+    - **Database Integration**: Uses SQLAlchemy with a SQLite database to store metadata about each report (ID, prompt, file path, creation/update timestamps, error messages).
+    - **Asynchronous Processing**: Report generation via the API is handled asynchronously using `fastapi.concurrency.run_in_threadpool` to prevent blocking.
+    - **Data Validation**: Employs Pydantic schemas for robust request and response validation.
 - **French Language Focus**: All agents, tasks, and tools are configured to process and generate medical reports in French.
+- **Enhanced Information Extraction**: The `information_extractor` agent now attempts to identify and extract patient age and sex from the input prompt. This information is then prepended to the "Indication" section of the generated report by the `template_mapper` agent.
 - **Dynamic Report Titling**: The title of the generated report is dynamically set based on the type of medical examination identified by the `report_classifier` agent.
 - **Retrieval Augmented Generation (RAG)**: The `information_extractor` uses a RAG tool (`RAGMedicalReportsTool`) to retrieve relevant information from a knowledge base of existing French medical reports. This tool uses French stopwords for TF-IDF vectorization.
 - **Report Type Classification**: A dedicated `MedicalReportClassifierTool` uses keyword matching to identify the specific type of IRM or other medical exam, with an expandable keyword list for various exam types (e.g., `irm_hepatique`, `irm_genou`, `irm_entero_mici`, `irm_epilepsie`).
@@ -27,6 +40,7 @@ The system outputs a professional radiology report in French, in both text and W
 - **Configurable Workflow**: Agents and tasks are defined in YAML files (`config/agents.yaml`, `config/tasks.yaml`), allowing for easier customization of roles, goals, LLMs, and task descriptions.
 - **Testing Framework**: Includes a `test()` function in `main.py` to evaluate the system using a set of test reports. This function extracts a prompt (currently the "Indication" section) from a test file, runs the full crew, and saves the generated report alongside the ground truth for manual comparison.
 - **Professor's Requirements Alignment**: The project structure and functionality have been progressively updated to meet specific academic requirements, including data partitioning for knowledge base vs. test sets, and detailed instructions for report generation and validation.
+- **API for Integration**: A FastAPI backend now provides endpoints for generating, listing, downloading, and deleting reports, making the system accessible programmatically.
 
 ## Requirements
 
@@ -73,7 +87,9 @@ You can obtain a token from your [Google AI Studio account](https://aistudio.goo
 Run the medical report generator from the root folder of your project:
 
 ```bash
-crewai run # Runs the main report generation with a sample input
+crewai run # Runs the main report generation with a sample input (CLI mode)
+# To run the FastAPI server (example using uvicorn):
+# uvicorn api.main:app --reload --host 0.0.0.0 --port 8000
 ```
 
 To run the testing function:
@@ -93,7 +109,8 @@ This will:
 
 ### Input Medical Text
 
-- For the main `run` command: Modify the `raw_medical_input` variable in `src/medical_report_generator/main.py`.
+- For the main `run` command (CLI): Modify the `raw_medical_input` variable in `src/medical_report_generator/main.py`.
+- For the API: Send a JSON payload to the `POST /api/v1/generate` endpoint with the key `prompt_text` containing the French medical input.
 - For `test` command: Place French `.txt` ground truth reports in `knowledge/reports/testing/`. Prompts are currently extracted from the "Indication:" section of these files.
 
 ### Knowledge Base (for RAG)
@@ -125,6 +142,12 @@ medical_report_generator/
 │   │   └── testing_outputs/ # Generated reports from the test function
 ├── pyproject.toml        # Project dependencies and configuration
 ├── README.md             # This documentation file
+├── api/                  # FastAPI backend
+│   ├── __init__.py
+│   ├── main.py           # FastAPI application and endpoints
+│   ├── models.py         # SQLAlchemy models
+│   ├── schemas.py        # Pydantic schemas
+│   └── database.py       # Database setup and session management
 ├── src/
 │   └── medical_report_generator/
 │       ├── config/
