@@ -78,17 +78,21 @@ def create_word_document(report_text: str, filename: str = "radiology_report.doc
         for header in section_headers_list:
             if stripped_line.upper().startswith(header.upper()):
                 if current_section_header:
-                    report_sections_data[current_section_header] = "\n".join(current_section_content).strip()
+                    report_sections_data[current_section_header] = "\n".join(
+                        current_section_content
+                    ).strip()
                 current_section_header = header
-                current_section_content = [stripped_line[len(header):].strip()]
+                current_section_content = [stripped_line[len(header) :].strip()]
                 found_new_header = True
                 break
         if not found_new_header and current_section_header:
             if stripped_line:
                 current_section_content.append(stripped_line)
-        
+
         if line_idx == len(lines_for_sections) - 1 and current_section_header:
-            report_sections_data[current_section_header] = "\n".join(current_section_content).strip()
+            report_sections_data[current_section_header] = "\n".join(
+                current_section_content
+            ).strip()
 
     # Add sections to the document in the defined order
     for header in section_headers_list:
@@ -97,7 +101,7 @@ def create_word_document(report_text: str, filename: str = "radiology_report.doc
         header_run = paragraph.add_run(header)
         header_run.bold = True
         paragraph.add_run(" ")
-        
+
         if content and content != "-" and content.upper() != "NÉANT":
             paragraph.add_run(content)
         else:
@@ -107,12 +111,14 @@ def create_word_document(report_text: str, filename: str = "radiology_report.doc
     try:
         document.save(filename)
         print(f"\nCompte rendu généré avec succès sous le nom '{filename}'")
+        return {"is_generated": True, "filename": filename}
     except Exception as e:
         print(f"\nErreur lors de l'enregistrement du document : {e}")
         sys.exit(1)
+        return {"is_generated": False, "error": str(e)}
 
 
-def run():
+def run(medical_input: str = None):
     """
     Run the crew to generate a medical report.
     """
@@ -138,7 +144,9 @@ Conclusion : Quelques petits implants d'endométriose superficielle visibles au 
     """
 
     # Define the inputs for the first task
-    inputs = {"raw_input": raw_medical_input}
+    inputs = {
+        "raw_input": medical_input if medical_input is not None else raw_medical_input
+    }
 
     # Instantiate the Crew using the CrewBase class, passing the LLM
     try:
@@ -158,10 +166,23 @@ Conclusion : Quelques petits implants d'endométriose superficielle visibles au 
         current_file_path = Path(__file__).resolve()
         project_root = current_file_path.parent.parent.parent
         unique_name = datetime.now().strftime("radiology_report_%Y-%m-%d-%H-%M-%S.docx")
-        generated_report_path =  project_root / "generated" / "reports" / unique_name
+        generated_report_path_absolute = (
+            project_root / "generated" / "reports" / unique_name
+        )
+        generated_report_path_relative = (
+            Path("generated") / "reports" / unique_name
+        ) 
 
         # Generate the .doc file from the final report text
-        create_word_document(result, filename=generated_report_path)
+        document_generation_status = create_word_document(
+            result, filename=generated_report_path_absolute
+        )
+
+        # If successful, replace the absolute path with the relative path string in the return value
+        if document_generation_status["is_generated"]:
+            document_generation_status["filename"] = str(generated_report_path_relative)
+
+        return document_generation_status
 
     except Exception as e:
         # Print a more informative error message including the exception type
@@ -180,7 +201,9 @@ def train():
     and might not be fully supported or necessary for all LLM providers
     or Hugging Face hosted models via the standard API.
     """
-    print("L'entraînement de l'équipe n'est pas complètement implémenté ou testé avec cette configuration LLM.")
+    print(
+        "L'entraînement de l'équipe n'est pas complètement implémenté ou testé avec cette configuration LLM."
+    )
     print("Adjust the train function based on CrewAI and LLM provider documentation.")
 
 
@@ -189,7 +212,9 @@ def replay():
     Replay the crew execution from a specific task.
     Note: Replay requires logging and persistence setup in CrewAI.
     """
-    print("La relecture de l'équipe n'est pas complètement implémentée ou testée avec cette configuration.")
+    print(
+        "La relecture de l'équipe n'est pas complètement implémentée ou testée avec cette configuration."
+    )
     print("Adjust the replay function based on CrewAI documentation.")
 
 
@@ -212,7 +237,9 @@ def test():
     print(f"Recherche des rapports de test à : {test_reports_path}")
 
     if not test_reports_path.exists():
-        print(f"Erreur : Le répertoire des rapports de test n'a pas été trouvé à {test_reports_path}")
+        print(
+            f"Erreur : Le répertoire des rapports de test n'a pas été trouvé à {test_reports_path}"
+        )
         sys.exit(1)
 
     test_files = list(test_reports_path.glob("*.txt"))
@@ -234,17 +261,26 @@ def test():
         for line in lines:
             stripped_line = line.strip()
             if stripped_line.upper().startswith("INDICATION:"):
-                prompt_input += stripped_line[len("INDICATION:"):].strip() + " "
+                prompt_input += stripped_line[len("INDICATION:") :].strip() + " "
                 capture = True
-            elif capture and not any(sh.upper() in stripped_line.upper() for sh in ["TECHNIQUE:", "INCIDENCES:", "RÉSULTAT:", "CONCLUSION:"]):
-                if stripped_line: prompt_input += stripped_line + " "
-            elif capture and any(sh.upper() in stripped_line.upper() for sh in ["TECHNIQUE:", "INCIDENCES:", "RÉSULTAT:", "CONCLUSION:"]):
+            elif capture and not any(
+                sh.upper() in stripped_line.upper()
+                for sh in ["TECHNIQUE:", "INCIDENCES:", "RÉSULTAT:", "CONCLUSION:"]
+            ):
+                if stripped_line:
+                    prompt_input += stripped_line + " "
+            elif capture and any(
+                sh.upper() in stripped_line.upper()
+                for sh in ["TECHNIQUE:", "INCIDENCES:", "RÉSULTAT:", "CONCLUSION:"]
+            ):
                 break
         prompt_input = prompt_input.strip()
 
         if not prompt_input:
-            print(f"Avertissement : Impossible d'extraire l'indication pour {selected_test_file.name}. Utilisation d'une invite générique.")
-            prompt_input = "Patiente consultant pour des douleurs pelviennes et suspicion d'endométriose." # Generic French fallback
+            print(
+                f"Avertissement : Impossible d'extraire l'indication pour {selected_test_file.name}. Utilisation d'une invite générique."
+            )
+            prompt_input = "Patiente consultant pour des douleurs pelviennes et suspicion d'endométriose."  # Generic French fallback
 
         print(f"\nInvite générée pour l'équipe :\n{prompt_input}")
         print("-------------------------------")
@@ -260,12 +296,18 @@ def test():
         print("\n## Texte du Compte Rendu Généré (Test):")
         print(generated_report_text)
         print("-------------------------------")
-        
-        generated_report_filename_docx = output_test_reports_path / f"generated_{selected_test_file.stem}.docx"
-        generated_report_filename_txt = output_test_reports_path / f"generated_{selected_test_file.stem}.txt"
-        
-        create_word_document(generated_report_text, filename=str(generated_report_filename_docx))
-        
+
+        generated_report_filename_docx = (
+            output_test_reports_path / f"generated_{selected_test_file.stem}.docx"
+        )
+        generated_report_filename_txt = (
+            output_test_reports_path / f"generated_{selected_test_file.stem}.txt"
+        )
+
+        create_word_document(
+            generated_report_text, filename=str(generated_report_filename_docx)
+        )
+
         with open(generated_report_filename_txt, "w", encoding="utf-8") as f:
             f.write("--- INVITE UTILISÉE ---\n")
             f.write(prompt_input + "\n\n")
@@ -273,18 +315,25 @@ def test():
             f.write(generated_report_text + "\n\n")
             f.write("--- COMPTE RENDU DE RÉFÉRENCE (GROUND TRUTH) ---\n")
             f.write(ground_truth_report_text)
-        print(f"Rapport de test (comparaison) sauvegardé en .txt : {generated_report_filename_txt}")
+        print(
+            f"Rapport de test (comparaison) sauvegardé en .txt : {generated_report_filename_txt}"
+        )
 
         print("\n## Comparaison (Manuelle pour l'instant):")
         print(f"Rapport original (vérité terrain) : {selected_test_file.name}")
-        print(f"Le rapport généré a été sauvegardé ici : {generated_report_filename_docx}")
+        print(
+            f"Le rapport généré a été sauvegardé ici : {generated_report_filename_docx}"
+        )
         print("Veuillez comparer manuellement le contenu et la structure.")
         print("-------------------------------")
 
     except FileNotFoundError:
         print(f"Erreur : Le fichier de test {selected_test_file} n'a pas été trouvé.")
     except Exception as e:
-        print(f"\nUne erreur s'est produite lors de l'exécution du test : {type(e).__name__}: {e}", file=sys.stderr)
+        print(
+            f"\nUne erreur s'est produite lors de l'exécution du test : {type(e).__name__}: {e}",
+            file=sys.stderr,
+        )
 
 
 # Entry point for the script
