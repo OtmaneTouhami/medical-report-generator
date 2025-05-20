@@ -1,7 +1,11 @@
-from fastapi import Depends, FastAPI, APIRouter
+from fastapi import Depends, FastAPI, APIRouter, HTTPException
+from fastapi.responses import FileResponse
 from api.models import Report
+from api import schemas
 from sqlalchemy.orm import Session
 from datetime import datetime
+from typing import List
+from pathlib import Path
 
 from medical_report_generator.main import run
 from .database import Base, get_db, engine
@@ -18,32 +22,54 @@ async def root():
     return {"message": "Hello World"}
 
 
-@api_router.get("/reports")
+@api_router.get("/reports", response_model=List[schemas.ReportResponse])
 async def get_reports(db: Session = Depends(get_db)):
     reports = db.query(Report).all()
     return reports
 
 
-@api_router.post("/generate")
+@api_router.post("/generate", response_model=schemas.ReportResponse)
 async def generate_report(prompt_text: str, db: Session = Depends(get_db)):
     report = Report(prompt_text=prompt_text)
     generate_report_result = run(prompt_text)
     if generate_report_result["is_generated"]:
-        report.generated_report_path = str(
-            generate_report_result["filename"]
-        )
+        report.generated_report_path = str(generate_report_result["filename"])
     else:
         report.error_message = generate_report_result.get(
             "error", "Error generating report"
         )
 
     report.created_at = datetime.utcnow()
-    report.updated_at = datetime.utcnow()  
+    report.updated_at = datetime.utcnow()
 
     db.add(report)
     db.commit()
     db.refresh(report)
     return report
+
+
+@api_router.get("/reports/{report_id}/download")
+async def download_report(report_id: int, db: Session = Depends(get_db)):
+    report = db.query(Report).filter(Report.id == report_id).first()
+    if not report:
+        raise HTTPException(status_code=404, detail="Report not found")
+
+    if not report.generated_report_path:
+        raise HTTPException(
+            status_code=404, detail="Report file not available for download"
+        )
+
+    project_root = Path(__file__).resolve().parent.parent
+    file_path = project_root / report.generated_report_path
+
+    if not file_path.is_file():
+        raise HTTPException(status_code=404, detail="Report file not found on server")
+
+    return FileResponse(
+        path=file_path,
+        filename=file_path.name,
+        media_type="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    )
 
 
 app.include_router(api_router)
