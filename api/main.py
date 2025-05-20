@@ -1,5 +1,6 @@
-from fastapi import Depends, FastAPI, APIRouter, HTTPException
+from fastapi import Depends, FastAPI, APIRouter, HTTPException, Response, status
 from fastapi.responses import FileResponse
+from fastapi.concurrency import run_in_threadpool
 from api.models import Report
 from api import schemas
 from sqlalchemy.orm import Session
@@ -21,7 +22,7 @@ api_router = APIRouter(prefix="/api/v1")
 
 @api_router.get("/")
 async def root():
-    return {"message": "Hello World"}
+    return {"message": "Hello To The Medical Report Generator API"}
 
 
 @api_router.get("/reports", response_model=List[schemas.ReportResponse])
@@ -33,7 +34,7 @@ async def get_reports(db: Session = Depends(get_db)):
 @api_router.post("/generate", response_model=schemas.ReportResponse)
 async def generate_report(prompt_text: str, db: Session = Depends(get_db)):
     report = Report(prompt_text=prompt_text)
-    generate_report_result = run(prompt_text)
+    generate_report_result = await run_in_threadpool(run, prompt_text)
     if generate_report_result["is_generated"]:
         report.generated_report_path = str(generate_report_result["filename"])
     else:
@@ -72,7 +73,8 @@ async def download_report(report_id: int, db: Session = Depends(get_db)):
         media_type="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
     )
 
-@api_router.delete("/reports/{report_id}")
+
+@api_router.delete("/reports/{report_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_report(report_id: int, db: Session = Depends(get_db)):
     report = db.query(Report).filter(Report.id == report_id).first()
     if not report:
@@ -80,28 +82,30 @@ async def delete_report(report_id: int, db: Session = Depends(get_db)):
 
     if report.generated_report_path:
         file_path = project_root / report.generated_report_path
-        
+
         if file_path.is_file():
             file_path.unlink()
 
     db.delete(report)
     db.commit()
 
-    return {"message": "Report deleted successfully"}
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
 
-@api_router.delete("/reports")
+
+@api_router.delete("/reports", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_all_reports(db: Session = Depends(get_db)):
     reports = db.query(Report).all()
-    for report in reports:
-        if report.generated_report_path:
-            file_path = project_root / report.generated_report_path
-            
+    for report_item in reports:
+        if report_item.generated_report_path:
+            file_path = project_root / report_item.generated_report_path
+
             if file_path.is_file():
                 file_path.unlink()
 
-        db.delete(report)
+        db.delete(report_item)
     db.commit()
 
-    return {"message": "All reports deleted successfully"}
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
+
 
 app.include_router(api_router)
