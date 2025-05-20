@@ -7,6 +7,7 @@ from docx.enum.text import WD_PARAGRAPH_ALIGNMENT
 import re
 import random
 from pathlib import Path
+from datetime import datetime
 
 from medical_report_generator.crew import MedicalReportGenerator
 
@@ -154,8 +155,13 @@ Conclusion : Quelques petits implants d'endométriose superficielle visibles au 
         print(result)
         print("-------------------------------")
 
+        current_file_path = Path(__file__).resolve()
+        project_root = current_file_path.parent.parent.parent
+        unique_name = datetime.now().strftime("radiology_report_%Y-%m-%d-%H-%M-%S.docx")
+        generated_report_path =  project_root / "generated" / "reports" / unique_name
+
         # Generate the .doc file from the final report text
-        create_word_document(result, filename="radiology_report.docx")
+        create_word_document(result, filename=generated_report_path)
 
     except Exception as e:
         # Print a more informative error message including the exception type
@@ -198,7 +204,7 @@ def test():
     current_file_path = Path(__file__).resolve()
     project_root = current_file_path.parent.parent.parent
     test_reports_path = project_root / "knowledge" / "reports" / "testing"
-    output_test_reports_path = project_root / "knowledge" / "reports" / "testing_outputs"
+    output_test_reports_path = project_root / "generated" / "testing_outputs"
     output_test_reports_path.mkdir(parents=True, exist_ok=True)
 
     print(f"Chemin du fichier actuel : {current_file_path}")
