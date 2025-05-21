@@ -1,6 +1,7 @@
 from fastapi import Depends, FastAPI, APIRouter, HTTPException, Response, status
 from fastapi.responses import FileResponse
 from fastapi.concurrency import run_in_threadpool
+from fastapi.middleware.cors import CORSMiddleware
 from api.models import Report
 from api import schemas
 from sqlalchemy.orm import Session
@@ -16,6 +17,14 @@ Base.metadata.create_all(bind=engine)
 project_root = Path(__file__).resolve().parent.parent
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 api_router = APIRouter(prefix="/api/v1")
 
@@ -67,11 +76,17 @@ async def download_report(report_id: int, db: Session = Depends(get_db)):
     if not file_path.is_file():
         raise HTTPException(status_code=404, detail="Report file not found on server")
 
-    return FileResponse(
+    response = FileResponse(
         path=file_path,
         filename=file_path.name,
         media_type="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
     )
+    
+    response.headers["Access-Control-Allow-Origin"] = "http://localhost:5173"
+    response.headers["Access-Control-Allow-Methods"] = "GET, OPTIONS"
+    response.headers["Access-Control-Allow-Headers"] = "*"
+    
+    return response
 
 
 @api_router.delete("/reports/{report_id}", status_code=status.HTTP_204_NO_CONTENT)

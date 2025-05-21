@@ -19,17 +19,17 @@ The system outputs a professional radiology report in French, in both text and W
 
 - **Multi-Agent System**: Leverages multiple specialized AI agents for a modular and robust workflow.
 - **FastAPI Backend & API**:
-    - Exposes report generation and management via a RESTful API built with FastAPI.
-    - All API routes are versioned under `/api/v1/`.
-    - **Endpoints**:
-        - `POST /api/v1/generate`: Accepts a JSON payload with `prompt_text` to generate a new medical report. Returns report metadata including the path to the generated `.docx` file.
-        - `GET /api/v1/reports`: Lists all previously generated reports with their metadata.
-        - `GET /api/v1/reports/{report_id}/download`: Allows downloading of the `.docx` file for a specific report.
-        - `DELETE /api/v1/reports/{report_id}`: Deletes a specific report entry and its associated file.
-        - `DELETE /api/v1/reports`: Deletes all report entries and their associated files.
-    - **Database Integration**: Uses SQLAlchemy with a SQLite database to store metadata about each report (ID, prompt, file path, creation/update timestamps, error messages).
-    - **Asynchronous Processing**: Report generation via the API is handled asynchronously using `fastapi.concurrency.run_in_threadpool` to prevent blocking.
-    - **Data Validation**: Employs Pydantic schemas for robust request and response validation.
+  - Exposes report generation and management via a RESTful API built with FastAPI.
+  - All API routes are versioned under `/api/v1/`.
+  - **Endpoints**:
+    - `POST /api/v1/generate`: Accepts a JSON payload with `prompt_text` to generate a new medical report. Returns report metadata including the path to the generated `.docx` file.
+    - `GET /api/v1/reports`: Lists all previously generated reports with their metadata.
+    - `GET /api/v1/reports/{report_id}/download`: Allows downloading of the `.docx` file for a specific report.
+    - `DELETE /api/v1/reports/{report_id}`: Deletes a specific report entry and its associated file.
+    - `DELETE /api/v1/reports`: Deletes all report entries and their associated files.
+  - **Database Integration**: Uses SQLAlchemy with a SQLite database to store metadata about each report (ID, prompt, file path, creation/update timestamps, error messages).
+  - **Asynchronous Processing**: Report generation via the API is handled asynchronously using `fastapi.concurrency.run_in_threadpool` to prevent blocking.
+  - **Data Validation**: Employs Pydantic schemas for robust request and response validation.
 - **French Language Focus**: All agents, tasks, and tools are configured to process and generate medical reports in French.
 - **Enhanced Information Extraction**: The `information_extractor` agent now attempts to identify and extract patient age and sex from the input prompt. This information is then prepended to the "Indication" section of the generated report by the `template_mapper` agent.
 - **Dynamic Report Titling**: The title of the generated report is dynamically set based on the type of medical examination identified by the `report_classifier` agent.
@@ -41,12 +41,21 @@ The system outputs a professional radiology report in French, in both text and W
 - **Testing Framework**: Includes a `test()` function in `main.py` to evaluate the system using a set of test reports. This function extracts a prompt (currently the "Indication" section) from a test file, runs the full crew, and saves the generated report alongside the ground truth for manual comparison.
 - **Professor's Requirements Alignment**: The project structure and functionality have been progressively updated to meet specific academic requirements, including data partitioning for knowledge base vs. test sets, and detailed instructions for report generation and validation.
 - **API for Integration**: A FastAPI backend now provides endpoints for generating, listing, downloading, and deleting reports, making the system accessible programmatically.
+- **React Frontend**: A modern React frontend with the following features:
+  - Voice-to-text dictation for medical input
+  - Medical report generation using the backend API
+  - Report history and management
+  - Document viewing and downloading
+  - Light/dark mode theme support
+  - Responsive design for different screen sizes
 
 ## Requirements
 
 - Python >=3.10 <3.13
 - [UV](https://docs.astral.sh/uv/) for dependency management
 - Google AI Studio account with API Key (uses Gemini 2.0 flash model)
+- Node.js >=16 (for the React frontend)
+- pnpm (for frontend package management)
 
 ## Installation
 
@@ -99,6 +108,7 @@ crewai run test # (If configured in pyproject.toml) or python src/medical_report
 ```
 
 This will:
+
 1. Initialize all the AI agents.
 2. For `run`: Process the sample French medical text in `main.py`.
 3. For `test`: Load a random French test report from `knowledge/reports/testing/`, extract a prompt, and process it.
@@ -120,12 +130,14 @@ This will:
 ### Agent Configuration
 
 Each agent can be customized in `src/medical_report_generator/config/agents.yaml`:
+
 - Modify roles, goals, and backstories
 - Change or configure the LLM models used
 
 ### Report Template & Task Workflow
 
 The report structure, task descriptions (all in French), and inter-task data flow are defined in `src/medical_report_generator/config/tasks.yaml`. You can modify:
+
 - Section names and organization
 - Expected data formats
 - Report generation instructions
@@ -176,13 +188,50 @@ medical_report_generator/
 
 ## Troubleshooting
 
-- **Model Access Issues**: Ensure your gemini api key  has permission to access the model
+- **Model Access Issues**: Ensure your gemini api key has permission to access the model
 - **Python Version Errors**: Verify you're using Python >=3.10 <3.13
 - **Document Generation Errors**: Check that python-docx is properly installed
+
+## Running the Application
+
+### Backend (FastAPI)
+
+1. Make sure you're in the virtual environment where you installed the project dependencies.
+
+2. Start the FastAPI server:
+
+```bash
+./run_api.sh  # On Windows, use: python -m uvicorn api.main:app --reload --port 8000
+```
+
+The backend API will be available at http://localhost:8000. You can access the API documentation at http://localhost:8000/docs.
+
+### Frontend (React)
+
+1. Navigate to the frontend directory:
+
+```bash
+cd doc-chat-frontend
+```
+
+2. Install the frontend dependencies:
+
+```bash
+pnpm install
+```
+
+3. Start the React development server:
+
+```bash
+pnpm dev
+```
+
+The React frontend will be available at http://localhost:5173.
 
 ## Support
 
 For questions about this project:
+
 - Check the [crewAI documentation](https://docs.crewai.com)
 - Visit the [crewAI GitHub repository](https://github.com/joaomdmoura/crewai)
 - Join the [crewAI Discord community](https://discord.com/invite/X4JWnZnxPb)
