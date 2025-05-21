@@ -30,6 +30,7 @@ The system outputs a professional radiology report in French, in both text and W
   - **Database Integration**: Uses SQLAlchemy with a SQLite database to store metadata about each report (ID, prompt, file path, creation/update timestamps, error messages).
   - **Asynchronous Processing**: Report generation via the API is handled asynchronously using `fastapi.concurrency.run_in_threadpool` to prevent blocking.
   - **Data Validation**: Employs Pydantic schemas for robust request and response validation.
+  - **CORS Configuration**: Properly configured to allow frontend communication with the API.
 - **French Language Focus**: All agents, tasks, and tools are configured to process and generate medical reports in French.
 - **Enhanced Information Extraction**: The `information_extractor` agent now attempts to identify and extract patient age and sex from the input prompt. This information is then prepended to the "Indication" section of the generated report by the `template_mapper` agent.
 - **Dynamic Report Titling**: The title of the generated report is dynamically set based on the type of medical examination identified by the `report_classifier` agent.
@@ -48,6 +49,7 @@ The system outputs a professional radiology report in French, in both text and W
   - Document viewing and downloading
   - Light/dark mode theme support
   - Responsive design for different screen sizes
+  - Interactive report prompt viewer with modal display
 
 ## Requirements
 
@@ -98,13 +100,13 @@ Run the medical report generator from the root folder of your project:
 ```bash
 crewai run # Runs the main report generation with a sample input (CLI mode)
 # To run the FastAPI server (example using uvicorn):
-# uvicorn api.main:app --reload --host 0.0.0.0 --port 8000
+uvicorn api.main:app --reload --host 127.0.0.1 --port 8000
 ```
 
 To run the testing function:
 
 ```bash
-crewai run test # (If configured in pyproject.toml) or python src/medical_report_generator/main.py test
+crewai run test
 ```
 
 This will:
@@ -154,12 +156,37 @@ medical_report_generator/
 │   │   └── testing_outputs/ # Generated reports from the test function
 ├── pyproject.toml        # Project dependencies and configuration
 ├── README.md             # This documentation file
+├── reports.db            # SQLite database storing report metadata
 ├── api/                  # FastAPI backend
 │   ├── __init__.py
 │   ├── main.py           # FastAPI application and endpoints
 │   ├── models.py         # SQLAlchemy models
 │   ├── schemas.py        # Pydantic schemas
 │   └── database.py       # Database setup and session management
+├── doc-chat-frontend/    # React frontend application
+│   ├── src/
+│   │   ├── components/   # React UI components
+│   │   │   ├── ChatInterface.tsx    # Main application interface
+│   │   │   ├── MessageList.tsx      # Chat message display
+│   │   │   ├── MessageInput.tsx     # Text/voice input component
+│   │   │   ├── ReportsList.tsx      # Report history display
+│   │   │   ├── MessageBubble.tsx    # Individual message styling
+│   │   │   ├── Modal.tsx            # Reusable modal component
+│   │   │   └── icons/               # Custom UI icons
+│   │   ├── context/      # React context providers
+│   │   │   ├── ChatContext.tsx      # Chat/report state management
+│   │   │   └── ThemeContext.tsx     # Light/dark theme management
+│   │   ├── hooks/        # Custom React hooks
+│   │   │   └── useSpeechRecognition.ts  # Voice input handling
+│   │   ├── types/        # TypeScript type definitions
+│   │   │   └── index.ts
+│   │   ├── App.tsx       # Root application component
+│   │   └── main.tsx      # Application entry point
+│   ├── package.json      # Frontend dependencies
+│   ├── vite.config.ts    # Vite configuration
+│   └── tsconfig.json     # TypeScript configuration
+├── generated/            # Folder for generated report files
+│   └── reports/          # Contains generated .docx files
 ├── src/
 │   └── medical_report_generator/
 │       ├── config/
@@ -172,7 +199,6 @@ medical_report_generator/
 │           ├── classifier_tool.py # Report type classification
 │           ├── rag_tool.py        # RAG implementation
 │           └── custom_tool.py   # Placeholder for other custom tools
-# ... other files like .gitignore, etc.
 ```
 
 ## How It Works
@@ -198,13 +224,21 @@ medical_report_generator/
 
 1. Make sure you're in the virtual environment where you installed the project dependencies.
 
-2. Start the FastAPI server:
+2. Create and set up the `.env` file with your API keys as explained in the Configuration Setup section.
+
+3. Start the FastAPI server:
 
 ```bash
-./run_api.sh  # On Windows, use: python -m uvicorn api.main:app --reload --port 8000
+# Using Fastapi CLI
+fastapi dev api/main.py
+
+# Using uvicorn
+uvicorn api.main:app --reload --host 127.0.0.1 --port 8000
 ```
 
 The backend API will be available at http://localhost:8000. You can access the API documentation at http://localhost:8000/docs.
+
+4. Verify that your API is working by visiting the documentation page and testing the root endpoint.
 
 ### Frontend (React)
 
@@ -227,6 +261,50 @@ pnpm dev
 ```
 
 The React frontend will be available at http://localhost:5173.
+
+### Full-Stack Application Setup
+
+For the complete application experience, follow these steps in order:
+
+1. Start the backend server first (keeping it running in one terminal).
+2. In a new terminal, start the frontend development server.
+3. Navigate to http://localhost:5173 in your browser to access the application.
+
+### Using the Application
+
+1. **Main Interface**: The application opens with a chat interface where you can enter medical dictations or notes.
+
+2. **Generating Reports**: 
+   - Type your medical notes in the text input at the bottom of the screen
+   - Alternatively, use the voice input feature to dictate your notes
+   - Click the send button to submit the text for processing
+   - A loading indicator will appear while the report is being generated
+   - Once complete, the report will be added to your history
+
+3. **Managing Reports**:
+   - Click the history icon in the top-right corner to view your report history
+   - Click on any report card to view the original prompt in a modal window
+   - Use the download button to download any generated report as a .docx file
+   - Use the delete button to remove individual reports
+   - Use the "Delete All" button to clear all reports
+
+4. **User Interface Features**:
+   - Toggle between light and dark modes using the theme button in the header
+   - The interface is fully responsive and works on mobile devices
+   - Error messages are displayed if report generation fails
+
+## Recent UI Improvements
+
+The frontend application has been enhanced with the following UI improvements:
+
+- **Fixed Scrolling Issues**: The chat container now properly scrolls through message history while keeping the input area fixed at the bottom.
+- **Enhanced Loading Indicator**: The loading overlay now stays visible regardless of scroll position, with better styling and visibility.
+- **Interactive Report History**: The report history sidebar has been widened for better readability and now supports clicking on reports to view details.
+- **Report Prompt Modal**: Added a new feature that displays the full prompt text in a responsive modal when clicking on a report in the history sidebar.
+- **Improved Modal System**: Updated the Modal component to support customizable widths, particularly useful for viewing longer medical prompts.
+- **Better Empty State Messaging**: Improved the empty state message in the chat interface to provide clearer user guidance.
+- **Optimized Scrolling Behavior**: Enhanced the auto-scroll functionality with multiple timing attempts to ensure new messages are always visible.
+- **Responsive Layout Improvements**: Better handling of different screen sizes and responsive behavior throughout the application.
 
 ## Support
 
