@@ -6,18 +6,20 @@ Welcome to the MedicalReportGenerator Crew, an advanced AI-based system designed
 
 This system uses a team of specialized AI agents working together to transform unstructured French medical text into properly formatted radiology reports:
 
-1. **Report Classifier (`report_classifier`)**: Identifies the specific type of medical examination (e.g., IRM du genou, IRM hépatique) from the input text. Its output is used for dynamic report titling and to guide focused RAG retrieval.
-2. **Information Extractor (`information_extractor`)**: Identifies and extracts all relevant medical facts from the raw input, utilizing a RAG (Retrieval Augmented Generation) tool that can leverage similar reports from a knowledge base, filtered by the classified report type.
-3. **Template Mapper (`template_mapper`)**: Maps extracted data to appropriate sections of a standard French radiology report (Indication, Technique, Incidences, Résultat, Conclusion).
-4. **Report Section Generator (`report_section_generator`)**: Transforms the structured data for each section into professional medical language, in French.
-5. **Semantic Validator (`semantic_validator`)**: Reviews the generated section content for clinical and semantic coherence, checking for contradictions or medically improbable statements, and suggests corrections if needed.
-6. **Report Finalizer and Reviewer (`report_finalizer_and_reviewer`)**: Assembles the (potentially validated) sections into the final report structure. It uses the classified report type to generate a dynamic title (e.g., "Compte Rendu IRM du Genou") and ensures empty sections are appropriately marked (e.g., with "Néant").
+1. **Transcription Corrector (`transcription_corrector`)**: Cleans and corrects the raw input text, especially from speech-to-text, focusing on medical terminology and removing disfluencies.
+2. **Report Classifier (`report_classifier`)**: Identifies the specific type of medical examination (e.g., IRM du genou, IRM hépatique) from the corrected input text. Its output is used for dynamic report titling and to guide focused RAG retrieval.
+3. **Information Extractor (`information_extractor`)**: Identifies and extracts all relevant medical facts from the corrected input, utilizing a RAG (Retrieval Augmented Generation) tool that can leverage similar reports from a knowledge base, filtered by the classified report type.
+4. **Template Mapper (`template_mapper`)**: Maps extracted data to appropriate sections of a standard French radiology report (Indication, Technique, Incidences, Résultat, Conclusion).
+5. **Report Section Generator (`report_section_generator`)**: Transforms the structured data for each section into professional medical language, in French. If a section has no relevant information, it will be left empty.
+6. **Semantic Validator (`semantic_validator`)**: Reviews the generated section content for clinical and semantic coherence, checking for contradictions or medically improbable statements, and suggests corrections if needed.
+7. **Report Finalizer and Reviewer (`report_finalizer_and_reviewer`)**: Assembles the (potentially validated) sections into the final report structure. It uses the classified report type to generate a dynamic title (e.g., "Compte Rendu IRM du Genou") and ensures sections with no information are left blank after their title.
 
 The system outputs a professional radiology report in French, in both text and Word document (.docx) formats.
 
 ## Key Features & Recent Enhancements
 
 - **Multi-Agent System**: Leverages multiple specialized AI agents for a modular and robust workflow.
+- **Transcription Correction**: A dedicated agent at the start of the workflow cleans and refines raw input, especially from speech-to-text, to improve accuracy of subsequent processing.
 - **FastAPI Backend & API**:
   - Exposes report generation and management via a RESTful API built with FastAPI.
   - All API routes are versioned under `/api/v1/`.
@@ -34,10 +36,10 @@ The system outputs a professional radiology report in French, in both text and W
 - **French Language Focus**: All agents, tasks, and tools are configured to process and generate medical reports in French.
 - **Enhanced Information Extraction**: The `information_extractor` agent now attempts to identify and extract patient age and sex from the input prompt. This information is then prepended to the "Indication" section of the generated report by the `template_mapper` agent.
 - **Dynamic Report Titling**: The title of the generated report is dynamically set based on the type of medical examination identified by the `report_classifier` agent.
-- **Retrieval Augmented Generation (RAG)**: The `information_extractor` uses a RAG tool (`RAGMedicalReportsTool`) to retrieve relevant information from a knowledge base of existing French medical reports. This tool uses French stopwords for TF-IDF vectorization.
+- **Retrieval Augmented Generation (RAG)**: The `information_extractor` uses an improved `RAGMedicalReportsTool` to retrieve relevant information from a knowledge base of existing French medical reports. This tool uses French stopwords for TF-IDF vectorization.
 - **Report Type Classification**: A dedicated `MedicalReportClassifierTool` uses keyword matching to identify the specific type of IRM or other medical exam, with an expandable keyword list for various exam types (e.g., `irm_hepatique`, `irm_genou`, `irm_entero_mici`, `irm_epilepsie`).
 - **Semantic Validation**: A `semantic_validator` agent reviews the drafted report sections for clinical and semantic consistency, aiming to detect contradictions or improbable statements.
-- **Structured DOCX Output**: Generates a formatted Word document (`.docx`) with appropriate section headers (Indication, Technique, Incidences, Résultat, Conclusion) and handles empty sections elegantly by marking them as "Néant".
+- **Structured DOCX Output**: Generates a formatted Word document (`.docx`) with appropriate section headers (Indication, Technique, Incidences, Résultat, Conclusion). Sections for which no information is found are left blank (only the title is present).
 - **Configurable Workflow**: Agents and tasks are defined in YAML files (`config/agents.yaml`, `config/tasks.yaml`), allowing for easier customization of roles, goals, LLMs, and task descriptions.
 - **Testing Framework**: Includes a `test()` function in `main.py` to evaluate the system using a set of test reports. This function extracts a prompt (currently the "Indication" section) from a test file, runs the full crew, and saves the generated report alongside the ground truth for manual comparison.
 - **Professor's Requirements Alignment**: The project structure and functionality have been progressively updated to meet specific academic requirements, including data partitioning for knowledge base vs. test sets, and detailed instructions for report generation and validation.
@@ -204,13 +206,14 @@ medical_report_generator/
 ## How It Works
 
 1. **Input**: French raw medical text is provided.
-2. **Classification**: The `report_classifier` determines the specific IRM/exam type.
-3. **Data Extraction (RAG-enhanced)**: The `information_extractor`, guided by the classified report type, uses the `RAGMedicalReportsTool` to fetch relevant examples from the French knowledge base and extracts key clinical details from the input.
-4. **Template Mapping**: The `template_mapper` organizes extracted French information into standard report sections.
-5. **Section Content Generation**: The `report_section_generator` writes professional French content for each section.
-6. **Semantic Validation**: The `semantic_validator` reviews the drafted sections for clinical and semantic coherence in French.
-7. **Final Assembly & Review**: The `report_finalizer_and_reviewer` uses the classified report type for a dynamic title and assembles the validated French sections into the complete report, handling empty sections with "Néant".
-8. **Document Creation**: The system generates a formatted Word document (`.docx`) of the French report.
+2. **Transcription Correction**: The `transcription_corrector` cleans and corrects the input text.
+3. **Classification**: The `report_classifier` determines the specific IRM/exam type from the corrected text.
+4. **Data Extraction (RAG-enhanced)**: The `information_extractor`, guided by the classified report type, uses the `RAGMedicalReportsTool` to fetch relevant examples from the French knowledge base and extracts key clinical details from the corrected input.
+5. **Template Mapping**: The `template_mapper` organizes extracted French information into standard report sections.
+6. **Section Content Generation**: The `report_section_generator` writes professional French content for each section. If no information is available for a section, it remains empty.
+7. **Semantic Validation**: The `semantic_validator` reviews the drafted sections for clinical and semantic coherence in French.
+8. **Final Assembly & Review**: The `report_finalizer_and_reviewer` uses the classified report type for a dynamic title and assembles the validated French sections into the complete report, ensuring sections with no information are left blank.
+9. **Document Creation**: The system generates a formatted Word document (`.docx`) of the French report.
 
 ## Troubleshooting
 
@@ -305,6 +308,10 @@ The frontend application has been enhanced with the following UI improvements:
 - **Better Empty State Messaging**: Improved the empty state message in the chat interface to provide clearer user guidance.
 - **Optimized Scrolling Behavior**: Enhanced the auto-scroll functionality with multiple timing attempts to ensure new messages are always visible.
 - **Responsive Layout Improvements**: Better handling of different screen sizes and responsive behavior throughout the application.
+
+## Developers
+
+This project was developed by **The Three Wise Clowns**.
 
 ## Support
 
