@@ -127,20 +127,11 @@ def run(medical_input: str = None):
 
     # Using the French input example for endometriosis
     raw_medical_input = """
-Patiente de 38 ans, adressée pour bilan de douleurs pelviennes chroniques avec dysménorrhée et dyspareunie profondes. Suspicion d'endométriose.
-Antécédents : RAS.
-Dernières règles : J10 du cycle.
-L'examen IRM pelvien a été réalisé sur une antenne de 1.5 Tesla, avec des séquences axiales T1, axiales et sagittales T2, axiales T2 avec saturation de graisse, et des séquences de diffusion. Injection de Gadolinium non réalisée.
-Résultats :
-Utérus antéversé, de taille normale. Myomètre homogène. Cavité utérine sans particularité. Zone jonctionnelle d'épaisseur normale.
-Ovaires en position normale, de taille et morphologie conservées, sans kyste suspect.
-Pas d'anomalie significative au niveau des trompes.
-Présence de quelques petits foyers d'hypersignal T1 spontané et T2 variable au niveau du cul-de-sac de Douglas et sur le ligament utéro-sacré gauche, compatibles avec des implants d'endométriose superficielle. Le plus large mesure environ 4mm.
-Pas d'atteinte du torus utérin.
-Pas de signe d'adénomyose.
-Pas d'endométriome visible.
-Pas d'atteinte digestive ou urinaire évidente sur cet examen (limites de la technique pour les atteintes digestives superficielles sans préparation spécifique).
-Conclusion : Quelques petits implants d'endométriose superficielle visibles au niveau du cul-de-sac de Douglas et du ligament utéro-sacré gauche. Pas de signe d'endométriose profonde ou d'endométriome sur cet examen.
+Une femme de 38 ans consulte pour des douleurs dans le bas-ventre qui durent depuis longtemps, avec des règles très douloureuses et des douleurs pendant les rapports sexuels. Le médecin pense qu'elle pourrait avoir de l'endométriose. Elle n'a pas d'antécédents médicaux particuliers et ses dernières règles remontent à 10 jours.
+L'imagerie par résonance magnétique du bassin a été effectuée avec un appareil de 1,5 Tesla utilisant différentes techniques d'acquisition d'images sans injection de produit de contraste. L'utérus se trouve dans une position normale vers l'avant et présente une taille habituelle. Le muscle utérin apparaît uniforme et la cavité interne de l'utérus ne montre rien d'anormal. L'épaisseur de la zone entre le muscle et la muqueuse utérine est dans les normes.
+Les ovaires sont situés normalement avec une taille et une forme habituelles, sans kyste inquiétant. Les trompes ne présentent pas d'anomalie notable. On observe quelques petites zones qui apparaissent claires sur certaines images et variables sur d'autres au niveau de la partie basse du bassin derrière l'utérus et sur le ligament qui relie l'utérus au sacrum du côté gauche. Ces zones correspondent probablement à de l'endométriose en surface. La plus grande de ces zones fait environ 4 millimètres.
+Il n'y a pas d'atteinte de la partie arrière supérieure de l'utérus. Aucun signe d'adénomyose n'est visible. On ne voit pas de kyste endométriosique. Il n'y a pas d'atteinte apparente du système digestif ou urinaire sur cet examen, bien que l'imagerie ait ses limites pour détecter certaines atteintes digestives superficielles sans préparation particulière.
+En résumé, l'examen révèle quelques petits foyers d'endométriose superficielle visibles dans la partie basse du bassin et sur le ligament utéro-sacré gauche, sans signe d'endométriose profonde ou de kyste endométriosique
     """
 
     # Define the inputs for the first task

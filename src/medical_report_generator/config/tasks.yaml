@@ -1,6 +1,3 @@
-# tasks.yaml
-# Définit les tâches pour l'équipe de Génération de Rapports Radiologiques Médicaux.
-
 classify_report_type:
   description: >
     Analysez le texte médical brut suivant ou la transcription vocale fournie comme contexte (en français):
@@ -20,30 +17,9 @@ classify_report_type:
 
 extract_medical_data:
   description: >
-    Analysez le texte médical brut suivant ou la transcription vocale fournie comme contexte (en français):
-    ---
-    {raw_input}
-    ---
-    Premièrement, utilisez le `report_type` (type de rapport) de la tâche précédente pour récupérer des rapports similaires
-    de la base de connaissances à l'aide de l'outil `retrieve_similar_reports`.
-    Ensuite, identifiez et extrayez TOUS les faits médicaux pertinents, observations, procédures mentionnées, antécédents du patient
-    pertinents pour l'examen, questions cliniques, détails techniques de l'examen, et toute autre information factuelle présentée, en français.
-    Utilisez les rapports similaires comme référence pour le type d'informations à extraire.
-    N'interprétez PAS et ne structurez PAS encore ces informations dans les sections finales du rapport.
-    La sortie doit être une liste structurée en français où chaque élément indique clairement ce qu'il est (par exemple, indication, constatation, technique) et son détail.
+    Analysez le texte médical brut suivant (fourni comme `{raw_input}`):\n    ---\n    {raw_input}\n    ---\n    Votre mission est d'extraire des informations FACTUELLES et EXPLICITES de `{raw_input}` UNIQUEMENT.\n    Vous pouvez utiliser l'outil `retrieve_similar_reports` pour voir des exemples de rapports et comprendre les *types de sections* (par exemple, 'Indication', 'Technique', 'Résultat', 'patient_age') qui existent typiquement. CECI EST LA SEULE UTILISATION AUTORISÉE DES RAPPORTS SIMILAIRES. NE REGARDEZ PAS LE CONTENU DE CES SECTIONS DANS LES RAPPORTS SIMILAIRES POUR Y TROUVER DES INFORMATIONS À EXTRAIRE OU POUR VOUS EN INSPIRER.\n    Pour chaque information que vous extrayez, elle doit être DIRECTEMENT PRÉSENTE dans `{raw_input}`.\n    Par exemple, si `{raw_input}` est "Patient diabétique.", alors la seule information à extraire est que l'indication est "Patient diabétique". N'ajoutez PAS d'âge, de sexe, de détails sur une technique d'imagerie, de résultats ou de conclusions si ceux-ci ne sont pas explicitement dans `{raw_input}`.\n    Si `{raw_input}` ne contient aucune information pour une catégorie typique (comme 'Technique' ou 'Résultat'), alors votre sortie ne doit RIEN contenir pour cette catégorie.\n    N'inventez, ne déduisez, et ne paraphrasez que minimalement. Soyez littéral.\n    La sortie doit être une liste structurée en français où chaque élément indique clairement son type (catégorie) et le détail extrait de `{raw_input}`.
   expected_output: >
-    Une liste structurée ou un objet JSON en français contenant tous les faits et observations médicales clés extraits.
-    Chaque élément doit clairement indiquer ce qu'il est (par exemple, indication, constatation, technique) et son détail.
-    Format d'exemple en français:
-    ```json
-    [
-      {"type": "indication", "detail": "le patient présente une toux et un essoufflement"},
-      {"type": "technique", "detail": "scanner thoracique avec contraste"},
-      {"type": "constatation", "detail": "petit nodule dans le lobe supérieur droit"},
-      {"type": "mesure", "detail": "le nodule mesure 5 mm"},
-      {"type": "localisation", "detail": "lobe supérieur droit"}
-    ]
-    ```
+    Une liste structurée (ou objet JSON) en français contenant UNIQUEMENT les faits et observations médicales CLÉS et EXPLICITEMENT extraits de `{raw_input}`.\n    Si `{raw_input}` est "Patient diabétique.", la sortie attendue est:\n    ```json\n    [\n      {\"type\": \"indication\", \"detail\": \"Patient diabétique\"}\n    ]\n    ```\n    Si `{raw_input}` est "Femme de 50 ans, douleur au genou. IRM demandée.", la sortie attendue est:\n    ```json\n    [\n      {\"type\": \"patient_sex\", \"detail\": \"Femme\"},\n      {\"type\": \"patient_age\", \"detail\": \"50 ans\"},\n      {\"type\": \"indication\", \"detail\": \"douleur au genou\"},\n      {\"type\": \"technique_demandee\", \"detail\": \"IRM\"}\n    ]\n    ```\n    Si `{raw_input}` est vide ou non pertinent, la sortie doit être une liste vide `[]`.
   agent: information_extractor
 
 map_data_to_template_sections:
@@ -75,14 +51,14 @@ generate_section_content:
     Un dictionnaire vous est fourni, mappant les sections du modèle de rapport radiologique à des listes de points de données médicales extraites (en français).
     Pour CHAQUE clé de section (Indication, Technique, Incidences, Résultat, Conclusion), rédigez le texte final, concis et professionnel en français
     pour cette partie du rapport, en vous basant *uniquement* sur les points de données fournis pour cette section.
-    Assurez-vous que le langage est approprié pour un rapport médical français – clair, bref et factuel. Évitez le jargon si possible,
+    Assurez-vous que le langage est approprié pour un rapport médical français - clair, bref et factuel. Évitez le jargon si possible,
     mais maintenez la précision médicale basée sur l'entrée.
-    Si la liste des points de données pour une section est vide dans l'entrée, la valeur de sortie pour le contenu de cette section DOIT être une chaîne vide `""`.
+    **Si la liste des points de données pour une section est vide dans l'entrée, la valeur de sortie pour le contenu de cette section DOIT être EXACTEMENT `""` (une chaîne de caractères vide). Ne pas inclure d'espaces ni aucun autre texte.**
     N'INCLUEZ PAS l'en-tête de section (comme "Indication:"). Fournissez simplement le contenu de la section en français.
     La sortie doit être un dictionnaire avec les noms de section comme clés et le texte généré comme valeurs, le tout en français.
   expected_output: >
     Un dictionnaire ou un objet JSON en français où les clés sont les noms de section du modèle (Indication, Technique, Incidences, Résultat, Conclusion),
-    et les valeurs sont la chaîne de contenu final écrite pour cette section. Si une section n'avait pas de données pertinentes, sa valeur doit être `""`.
+    et les valeurs sont la chaîne de contenu final écrite pour cette section. Si une section n'avait pas de données pertinentes, sa valeur doit être **EXACTEMENT `""` (une chaîne de caractères vide, sans aucun autre caractère ni espace).**
     Format d'exemple en français:
     ```json
     {
@@ -107,6 +83,7 @@ validate_semantic_coherence:
     2. Les Résultats ne se contredisent pas.
     3. La Conclusion découle logiquement des Résultats.
     4. Il n'y a pas d'affirmations qui semblent cliniquement erronées ou hautement improbables pour le contexte (si un contexte général est déductible).
+    Important : Si des sections du rapport d'entrée sont des chaînes vides (`""`), cela signifie qu'aucune information n'a été fournie pour elles. Considérez ces sections vides comme valides et ne les modifiez pas ou ne signalez pas qu'elles sont manquantes. Votre validation se concentre sur la cohérence du contenu *existant*.
     Si vous trouvez des problèmes, annotez-les clairement OU proposez des reformulations pour améliorer la cohérence.
     Si le contenu semble cohérent et correct, retournez le dictionnaire d'origine sans modification ou avec une simple note de validation.
     La sortie doit être le dictionnaire des sections (potentiellement annoté ou corrigé), en français.
@@ -138,16 +115,15 @@ assemble_and_review_report:
     Commencez par formuler un TITRE approprié en utilisant le type de rapport IRM identifié. Par exemple, si le type est "irm_genou", le titre pourrait être "Compte Rendu IRM du Genou".
     Ensuite, structurez le rapport en suivant la structure exacte ci-dessous, en incluant TOUS les en-têtes de section tels quels.
     Interprétez les annotations ou corrections du validateur sémantique (provenant de `{{validate_semantic_coherence.output}}`) si présentes et intégrez-les de manière appropriée dans le texte final des sections.
-    Pour les sections où le contenu est une chaîne vide `""`, incluez l'en-tête mais laissez le contenu vide ou ajoutez le substitut standard "Néant".
-    Formatez la sortie finale comme une chaîne de texte brut en français, prête pour la conversion en fichier .doc.
+    Pour les sections où le contenu (provenant de `{{validate_semantic_coherence.output}}`) est une chaîne vide `""` (signifiant qu'aucune information pertinente n'a été trouvée ou générée pour cette section), vous devez inclure l'en-tête de section (par exemple, "Incidences:") suivi d'une ligne vide. N'ajoutez PAS de texte de substitution comme "Néant" ou toute autre indication que la section est vide. La section doit simplement apparaître avec son titre et aucun contenu textuel après celui-ci.
 
     La structure de modèle requise est (les en-têtes doivent être exactement comme indiqué) :
     TITRE: [Titre formulé à partir du type de rapport IRM identifié]
-    Indication: [Contenu ou "Néant"]
-    Technique: [Contenu ou "Néant"]
-    Incidences: [Contenu ou "Néant"]
-    Résultat: [Contenu ou "Néant"]
-    Conclusion: [Contenu ou "Néant"]
+    Indication: [Contenu ou vide]
+    Technique: [Contenu ou vide]
+    Incidences: [Contenu ou vide]
+    Résultat: [Contenu ou vide]
+    Conclusion: [Contenu ou vide]
 
     Effectuez une révision finale de la correction structurelle selon le modèle et assurez-vous que toutes les sections sont présentes dans l'ordre. Le rapport final doit être entièrement en français.
   expected_output: >
@@ -161,7 +137,7 @@ assemble_and_review_report:
 
     Technique: Séquences T1, T2.
 
-    Incidences: Néant
+    Incidences:
 
     Résultat: Lésion méniscale.
 
