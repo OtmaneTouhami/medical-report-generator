@@ -16,7 +16,6 @@ class MedicalReportGenerator:
 
     agents_config = "config/agents.yaml"
     tasks_config = "config/tasks.yaml"
-    # Define the knowledge base path, adjust if your 'knowledge' folder is elsewhere
     knowledge_base_path = "knowledge/reports/training"
 
     @agent
@@ -24,7 +23,6 @@ class MedicalReportGenerator:
         return Agent(
             config=self.agents_config["transcription_corrector"],
             verbose=True,
-            # No tools needed for this agent presumably, unless you have a specific spellcheck/grammar tool
         )
 
     @agent
@@ -75,7 +73,6 @@ class MedicalReportGenerator:
         return Task(
             config=self.tasks_config["correct_transcription"],
             agent=self.transcription_corrector(),
-            # This task will take 'raw_input' by default from the kickoff
         )
 
     @task
@@ -83,7 +80,7 @@ class MedicalReportGenerator:
         return Task(
             config=self.tasks_config["classify_report_type"],
             agent=self.report_classifier(),
-            context=[self.correct_transcription()],  # Depends on corrected text
+            context=[self.correct_transcription()],
         )
 
     @task
@@ -91,7 +88,7 @@ class MedicalReportGenerator:
         return Task(
             config=self.tasks_config["extract_medical_data"],
             agent=self.information_extractor(),
-            context=[self.correct_transcription()],  # Depends on corrected text
+            context=[self.correct_transcription()],
         )
 
     @task
@@ -131,7 +128,7 @@ class MedicalReportGenerator:
         return Crew(
             agents=self.agents,
             tasks=[
-                self.correct_transcription(),  # New first task
+                self.correct_transcription(),
                 self.classify_report_type(),
                 self.extract_medical_data(),
                 self.map_data_to_template_sections(),
