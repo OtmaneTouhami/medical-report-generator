@@ -1,6 +1,6 @@
 from crewai.tools import BaseTool
 from typing import Type, List, Dict, Optional
-from pydantic import BaseModel, Field, PrivateAttr
+from pydantic import BaseModel, Field
 import os
 import re
 from pathlib import Path
@@ -9,16 +9,124 @@ from sklearn.metrics.pairwise import cosine_similarity
 
 # Basic list of French stopwords
 FRENCH_STOPWORDS = [
-    'au', 'aux', 'avec', 'ce', 'ces', 'dans', 'de', 'des', 'du', 'elle', 'en', 'et', 'eux', 'il', 'ils',
-    'je', 'la', 'le', 'les', 'leur', 'lui', 'ma', 'mais', 'me', 'même', 'mes', 'moi', 'mon', 'ne', 'nos',
-    'notre', 'nous', 'on', 'ou', 'par', 'pas', 'pour', 'qu', 'que', 'qui', 'sa', 'se', 'ses', 'son',
-    'sur', 'ta', 'te', 'tes', 'toi', 'ton', 'tu', 'un', 'une', 'vos', 'votre', 'vous', 'c', 'd', 'j',
-    'l', 'à', 'm', 'n', 's', 't', 'y', 'été', 'étée', 'étées', 'étés', 'étant', 'étante', 'étants',
-    'étantes', 'suis', 'es', 'est', 'sommes', 'êtes', 'sont', 'serai', 'seras', 'sera', 'serons',
-    'serez', 'seront', 'aurais', 'aura', 'aurons', 'aurez', 'auront', 'avais', 'avait', 'avions',
-    'aviez', 'avaient', 'eut', 'eûmes', 'eûtes', 'eurent', 'ai', 'as', 'avons', 'avez', 'ont', 'aurai',
-    'auras', 'aura', 'aurons', 'aurez', 'auront', 'fus', 'fut', 'fûmes', 'fûtes', 'furent'
+    "au",
+    "aux",
+    "avec",
+    "ce",
+    "ces",
+    "dans",
+    "de",
+    "des",
+    "du",
+    "elle",
+    "en",
+    "et",
+    "eux",
+    "il",
+    "ils",
+    "je",
+    "la",
+    "le",
+    "les",
+    "leur",
+    "lui",
+    "ma",
+    "mais",
+    "me",
+    "même",
+    "mes",
+    "moi",
+    "mon",
+    "ne",
+    "nos",
+    "notre",
+    "nous",
+    "on",
+    "ou",
+    "par",
+    "pas",
+    "pour",
+    "qu",
+    "que",
+    "qui",
+    "sa",
+    "se",
+    "ses",
+    "son",
+    "sur",
+    "ta",
+    "te",
+    "tes",
+    "toi",
+    "ton",
+    "tu",
+    "un",
+    "une",
+    "vos",
+    "votre",
+    "vous",
+    "c",
+    "d",
+    "j",
+    "l",
+    "à",
+    "m",
+    "n",
+    "s",
+    "t",
+    "y",
+    "été",
+    "étée",
+    "étées",
+    "étés",
+    "étant",
+    "étante",
+    "étants",
+    "étantes",
+    "suis",
+    "es",
+    "est",
+    "sommes",
+    "êtes",
+    "sont",
+    "serai",
+    "seras",
+    "sera",
+    "serons",
+    "serez",
+    "seront",
+    "aurais",
+    "aura",
+    "aurons",
+    "aurez",
+    "auront",
+    "avais",
+    "avait",
+    "avions",
+    "aviez",
+    "avaient",
+    "eut",
+    "eûmes",
+    "eûtes",
+    "eurent",
+    "ai",
+    "as",
+    "avons",
+    "avez",
+    "ont",
+    "aurai",
+    "auras",
+    "aura",
+    "aurons",
+    "aurez",
+    "auront",
+    "fus",
+    "fut",
+    "fûmes",
+    "fûtes",
+    "furent",
 ]
+
 
 class RetrieveReportsInput(BaseModel):
     """Input schema for retrieving similar medical reports."""
@@ -38,84 +146,135 @@ class RAGMedicalReportsTool(BaseTool):
         "to use as reference when generating a new report."
     )
     args_schema: Type[BaseModel] = RetrieveReportsInput
-    knowledge_base_path: Path = Field(default_factory=lambda: Path("knowledge/reports/training"))
-    _vectorizer: TfidfVectorizer = PrivateAttr(default_factory=lambda: TfidfVectorizer(stop_words=FRENCH_STOPWORDS))
-    _reports_cache: dict = PrivateAttr(default_factory=dict)
+    knowledge_base_path: Path = Field(
+        default_factory=lambda: Path("knowledge/reports/training")
+    )
 
     def __init__(self, knowledge_base_path: Optional[str] = None, **kwargs):
         super().__init__(**kwargs)
         if knowledge_base_path is not None:
             self.knowledge_base_path = Path(knowledge_base_path)
-        # The _vectorizer and _reports_cache will be initialized by their default_factory
+
+        # Initialisation explicite des attributs privés
+        self._vectorizer = TfidfVectorizer(
+            stop_words=FRENCH_STOPWORDS, max_features=5000
+        )
+        self._reports_cache = {}
 
     def _read_report(self, file_path: str) -> Dict[str, str]:
-        """Reads a report file and returns it as a dictionary of sections."""
+        """Reads a medical report and extracts its sections."""
         if file_path in self._reports_cache:
             return self._reports_cache[file_path]
 
-        with open(file_path, "r", encoding="utf-8") as f:
-            content = f.read()
+        try:
+            with open(file_path, "r", encoding="utf-8") as f:
+                content = f.read()
+        except (FileNotFoundError, UnicodeDecodeError) as e:
+            print(f"Erreur lecture fichier {file_path}: {e}")
+            return {}
 
-        # Parse sections
         sections = {}
         current_section = None
         section_content = []
 
-        lines = content.split("\n")
+        section_headers = [
+            "TITRE:",
+            "Indication:",
+            "Technique:",
+            "Incidences:",
+            "Résultat:",
+            "Conclusion:",
+        ]
+
+        lines = content.split("\\n")
         for line in lines:
-            line = line.strip()
-            if line in [
-                "TITRE:",
-                "Indication:",
-                "Technique:",
-                "Incidences:",
-                "Résultat:",
-                "Conclusion:",
-            ]:
-                # Save previous section if exists
-                if current_section:
-                    sections[current_section] = "\n".join(section_content).strip()
+            line_stripped = line.strip()
+
+            # Vérification si c'est un en-tête de section
+            is_header = False
+            for header in section_headers:
+                if line_stripped.startswith(header):
+                    # Sauvegarder la section précédente
+                    if current_section and section_content:
+                        sections[current_section] = "\\n".join(section_content).strip()
+
+                    # Extraction correcte du nom de section
+                    current_section = line_stripped.split(":", 1)[
+                        0
+                    ]  # Split only on the first colon
                     section_content = []
-                current_section = line.rstrip(":")
-            elif current_section:
-                section_content.append(line)
 
-        # Add the last section
+                    # Si le contenu suit directement l'en-tête sur la même ligne
+                    if len(line_stripped.split(":", 1)) > 1:
+                        content_after_header = line_stripped.split(":", 1)[1].strip()
+                        if content_after_header:
+                            section_content.append(content_after_header)
+                    is_header = True
+                    break
+
+            if (
+                not is_header and current_section and line_stripped
+            ):  # Ignorer les lignes vides et s'assurer que ce n'est pas un header
+                section_content.append(line_stripped)
+
+        # Ajouter la dernière section
         if current_section and section_content:
-            sections[current_section] = "\n".join(section_content).strip()
+            sections[current_section] = "\\n".join(section_content).strip()
 
-        # Cache the result
         self._reports_cache[file_path] = sections
         return sections
 
-    def _extract_report_type_from_filename(self, filename: str) -> str:
-        """Extract the report type from the filename."""
-        # Expected format: irm_type_number.txt
-        match = re.match(r"irm_([^_]+)_\d+\.txt", os.path.basename(filename))
-        if match:
-            return match.group(1)
+    def _extract_report_type_from_filename(self, filename: str) -> Optional[str]:
+        """Extracts the report type from the filename."""
+        basename = os.path.basename(filename)
+
+        # Essayer plusieurs patterns
+        patterns = [
+            r"irm_([a-zA-Z0-9_\\-]+?)_\\d+\\.txt",  # irm_type_number.txt (type can have _, letters, numbers, -)
+            r"irm_([a-zA-Z0-9_\\-]+?)\\.txt",  # irm_type.txt
+            r"([a-zA-Z0-9_\\-]+?)_irm_\\d+\\.txt",  # type_irm_number.txt
+            r"([a-zA-Z0-9_\\-]+?)\\.txt",  # type.txt (generic, less specific)
+        ]
+
+        for pattern in patterns:
+            match = re.match(pattern, basename, re.IGNORECASE)
+            if match:
+                # Ensure we capture the correct group, usually the first one
+                # For patterns like ([^_]+)_irm_\d+\.txt, group(1) is the type
+                # For irm_([^_]+)\.txt, group(1) is the type
+                # Check if match.groups() is not empty
+                if match.groups():
+                    return match.group(1).lower()
+
         return None
 
     def _get_all_reports(self) -> List[Dict]:
-        """Gets all reports from the knowledge base."""
+        """Loads all reports from the knowledge base directory."""
         reports = []
-        # Ensure knowledge_base_path is resolved correctly if it's relative
-        # For now, assuming it's correctly set by __init__ or default_factory
+
         if not self.knowledge_base_path.exists():
-            # Handle case where path doesn't exist, maybe return empty or log warning
-            print(f"Warning: Knowledge base path {self.knowledge_base_path} does not exist.")
+            print(f"Attention: Le chemin {self.knowledge_base_path} n'existe pas.")
             return []
-        for file_path in self.knowledge_base_path.glob("*.txt"):
-            report_type = self._extract_report_type_from_filename(str(file_path))
-            if report_type:
-                report_content = self._read_report(str(file_path))
-                reports.append(
-                    {
-                        "path": str(file_path),
-                        "type": report_type,
-                        "content": report_content,
-                    }
-                )
+
+        try:
+            for file_path_obj in self.knowledge_base_path.glob("*.txt"):
+                file_path = str(file_path_obj)
+                report_type = self._extract_report_type_from_filename(file_path)
+                if report_type:
+                    report_content = self._read_report(file_path)
+                    if report_content:  # Seulement si le contenu a été lu avec succès
+                        reports.append(
+                            {
+                                "path": file_path,
+                                "type": report_type,
+                                "content": report_content,
+                            }
+                        )
+        except Exception as e:
+            print(
+                f"Erreur lors du chargement des rapports depuis {self.knowledge_base_path}: {e}"
+            )
+
         return reports
 
     def _filter_reports_by_type(
@@ -132,38 +291,96 @@ class RAGMedicalReportsTool(BaseTool):
         ]
 
     def _calculate_similarity(self, query: str, reports: List[Dict]) -> List[Dict]:
-        """Calculates similarity between the query and each report."""
+        """Calculates the similarity of reports to the query using TF-IDF and cosine similarity."""
         if not reports:
             return []
 
-        # Prepare corpus for vectorization
-        corpus = [query]
-        for report in reports:
-            # Combine all sections into a single text for comparison
-            report_text = " ".join([v for v in report["content"].values() if v])
-            corpus.append(report_text)
+        # Préparation du corpus
+        corpus = []
+        valid_reports = []
 
-        # Vectorize
+        # Ajouter la requête
+        corpus.append(query)
+
+        # Traiter chaque rapport
+        for report in reports:
+            # Combiner toutes les sections en un seul texte
+            report_sections = []
+            # Ensure content is a dict
+            if isinstance(report.get("content"), dict):
+                for section_name, section_content_value in report["content"].items():
+                    if (
+                        section_content_value
+                        and isinstance(section_content_value, str)
+                        and section_content_value.strip()
+                    ):
+                        report_sections.append(
+                            f"{section_name}: {section_content_value}"
+                        )
+
+            if report_sections:  # Seulement si le rapport a du contenu
+                report_text = " ".join(report_sections)
+                corpus.append(report_text)
+                valid_reports.append(report)
+            else:
+                # If report has no processable content, assign 0 similarity and keep it
+                report["similarity"] = 0.0
+
+        # If only query exists or no valid reports to compare against
+        if len(corpus) < 2:
+            # Assign 0 similarity to all original reports if no comparison happened
+            for r_report in reports:
+                if "similarity" not in r_report:
+                    r_report["similarity"] = (
+                        0.0  # Corrected variable name and formatting
+                    )
+            return sorted(reports, key=lambda x: x.get("similarity", 0), reverse=True)
+
         try:
+            # Calcul de la matrice TF-IDF
+            # Utilisation de TF-IDF pour la vectorisation
+            # On utilise le corpus complet pour la vectorisation
+            # et on ne garde que les rapports valides pour le calcul de similarité
+
             tfidf_matrix = self._vectorizer.fit_transform(corpus)
 
-            # Calculate cosine similarity
-            cosine_similarities = cosine_similarity(
+            # Calcul de similarité cosinus
+            # tfidf_matrix[0:1] is the query vector
+            # tfidf_matrix[1:] are the report vectors
+            similarities = cosine_similarity(
                 tfidf_matrix[0:1], tfidf_matrix[1:]
             ).flatten()
 
-            # Add similarity scores to reports
-            for i, similarity in enumerate(cosine_similarities):
-                reports[i]["similarity"] = float(similarity)
+            # Ajout des scores aux rapports valides
+            for i, similarity_score in enumerate(similarities):
+                if i < len(valid_reports):  # Make sure we don't go out of bounds
+                    valid_reports[i]["similarity"] = float(similarity_score)
 
-            # Sort by similarity (descending)
-            return sorted(reports, key=lambda x: x["similarity"], reverse=True)
-        except Exception as e:
-            print(f"Error calculating similarity: {e}")
-            # If vectorization fails, return reports without sorting
+            # Create a map of path to similarity for valid_reports
+            similarity_map = {
+                report["path"]: report.get("similarity", 0.0)
+                for report in valid_reports
+            }
+
+            # Update original reports list with new similarities
             for report in reports:
-                report["similarity"] = 0.0
-            return reports
+                if report["path"] in similarity_map:
+                    report["similarity"] = similarity_map[report["path"]]
+                elif (
+                    "similarity" not in report
+                ):  # If not in valid_reports and no previous similarity
+                    report["similarity"] = 0.0
+
+            # Tri par similarité décroissante
+            return sorted(reports, key=lambda x: x.get("similarity", 0), reverse=True)
+
+        except Exception as e:
+            print(f"Erreur calcul similarité: {e}")
+            # Retourner les rapports sans score de similarité ou avec 0
+            for report_item in reports:  # Ensure all reports in the original list get a default similarity # Corrected variable name
+                if "similarity" not in report_item:
+                    report_item["similarity"] = 0.0  # Corrected formatting
+            return sorted(reports, key=lambda x: x.get("similarity", 0), reverse=True)
 
     def _format_report_for_output(self, report: Dict) -> str:
         """Formats a report for output."""

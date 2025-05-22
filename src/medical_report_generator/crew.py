@@ -1,6 +1,9 @@
 from crewai import Agent, Crew, Process, Task
 from crewai.project import CrewBase, agent, crew, task
-from medical_report_generator.tools import MedicalReportClassifierTool, RAGMedicalReportsTool
+from medical_report_generator.tools import (
+    MedicalReportClassifierTool,
+    RAGMedicalReportsTool,
+)
 
 # If you want to run a snippet of code before or after the crew starts,
 # you can use the @before_kickoff and @after_kickoff decorators
@@ -15,6 +18,14 @@ class MedicalReportGenerator:
     tasks_config = "config/tasks.yaml"
     # Define the knowledge base path, adjust if your 'knowledge' folder is elsewhere
     knowledge_base_path = "knowledge/reports/training"
+
+    @agent
+    def transcription_corrector(self) -> Agent:
+        return Agent(
+            config=self.agents_config["transcription_corrector"],
+            verbose=True,
+            # No tools needed for this agent presumably, unless you have a specific spellcheck/grammar tool
+        )
 
     @agent
     def report_classifier(self) -> Agent:
@@ -57,9 +68,14 @@ class MedicalReportGenerator:
 
     @agent
     def semantic_validator(self) -> Agent:
-        return Agent(
-            config=self.agents_config["semantic_validator"],
-            verbose=True
+        return Agent(config=self.agents_config["semantic_validator"], verbose=True)
+
+    @task
+    def correct_transcription(self) -> Task:
+        return Task(
+            config=self.tasks_config["correct_transcription"],
+            agent=self.transcription_corrector(),
+            # This task will take 'raw_input' by default from the kickoff
         )
 
     @task
@@ -67,6 +83,7 @@ class MedicalReportGenerator:
         return Task(
             config=self.tasks_config["classify_report_type"],
             agent=self.report_classifier(),
+            context=[self.correct_transcription()],  # Depends on corrected text
         )
 
     @task
@@ -74,6 +91,7 @@ class MedicalReportGenerator:
         return Task(
             config=self.tasks_config["extract_medical_data"],
             agent=self.information_extractor(),
+            context=[self.correct_transcription()],  # Depends on corrected text
         )
 
     @task
@@ -88,7 +106,7 @@ class MedicalReportGenerator:
         return Task(
             config=self.tasks_config["generate_section_content"],
             agent=self.report_section_generator(),
-            context = [self.map_data_to_template_sections()]
+            context=[self.map_data_to_template_sections()],
         )
 
     @task
@@ -96,7 +114,7 @@ class MedicalReportGenerator:
         return Task(
             config=self.tasks_config["validate_semantic_coherence"],
             agent=self.semantic_validator(),
-            context=[self.generate_section_content()]
+            context=[self.generate_section_content()],
         )
 
     @task
@@ -104,10 +122,7 @@ class MedicalReportGenerator:
         return Task(
             config=self.tasks_config["assemble_and_review_report"],
             agent=self.report_finalizer_and_reviewer(),
-            context=[
-                self.validate_semantic_coherence(), 
-                self.classify_report_type()
-            ]
+            context=[self.validate_semantic_coherence(), self.classify_report_type()],
         )
 
     @crew
@@ -116,6 +131,7 @@ class MedicalReportGenerator:
         return Crew(
             agents=self.agents,
             tasks=[
+                self.correct_transcription(),  # New first task
                 self.classify_report_type(),
                 self.extract_medical_data(),
                 self.map_data_to_template_sections(),

@@ -1,8 +1,28 @@
-classify_report_type:
+correct_transcription:
   description: >
-    Analysez le texte médical brut suivant ou la transcription vocale fournie comme contexte (en français):
+    Le texte suivant est une transcription brute (potentiellement d'une dictée vocale) en français :
     ---
     {raw_input}
+    ---
+    Votre tâche est de corriger ce texte. Concentrez-vous sur :
+    1. La correction des fautes d'orthographe, en accordant une attention particulière aux termes médicaux français.
+    2. La rectification des erreurs grammaticales mineures qui n'altèrent pas le sens.
+    3. La suppression des disfluences orales (par exemple, "euh", "hum", "alors euh", répétitions de mots comme "le le").
+    4. La standardisation de la ponctuation si nécessaire pour la clarté.
+    Assurez-vous que le sens médical original est préservé. Si un terme semble inhabituel mais pourrait être un terme médical spécifique,
+    soyez prudent et ne le modifiez que si vous êtes certain qu'il s'agit d'une erreur de transcription évidente.
+    Ne pas ajouter d'informations, ne pas reformuler en profondeur, juste nettoyer et corriger.
+  expected_output: >
+    Le texte français corrigé et nettoyé, prêt pour une analyse plus approfondie.
+    Par exemple, si l'entrée est "euh patient avec douleur abdominale euh et fievre",
+    la sortie attendue pourrait être "Patient avec douleur abdominale et fièvre."
+  agent: transcription_corrector
+
+classify_report_type:
+  description: >
+    Analysez le texte médical nettoyé suivant (en français), qui a déjà été corrigé pour les erreurs de transcription :
+    ---
+    {{correct_transcription.output}}
     ---
     Utilisez l'outil `classify_report_type` pour déterminer le type spécifique d'examen médical décrit dans le texte.
     Considérez la partie du corps examinée, le contexte médical, la terminologie spécifique, et tout autre indice qui
@@ -17,10 +37,37 @@ classify_report_type:
 
 extract_medical_data:
   description: >
-    Analysez le texte médical brut suivant (fourni comme `{raw_input}`):\n    ---\n    {raw_input}\n    ---\n    Votre mission est d'extraire des informations FACTUELLES et EXPLICITES de `{raw_input}` UNIQUEMENT.\n    Vous pouvez utiliser l'outil `retrieve_similar_reports` pour voir des exemples de rapports et comprendre les *types de sections* (par exemple, 'Indication', 'Technique', 'Résultat', 'patient_age') qui existent typiquement. CECI EST LA SEULE UTILISATION AUTORISÉE DES RAPPORTS SIMILAIRES. NE REGARDEZ PAS LE CONTENU DE CES SECTIONS DANS LES RAPPORTS SIMILAIRES POUR Y TROUVER DES INFORMATIONS À EXTRAIRE OU POUR VOUS EN INSPIRER.\n    Pour chaque information que vous extrayez, elle doit être DIRECTEMENT PRÉSENTE dans `{raw_input}`.\n    Par exemple, si `{raw_input}` est "Patient diabétique.", alors la seule information à extraire est que l'indication est "Patient diabétique". N'ajoutez PAS d'âge, de sexe, de détails sur une technique d'imagerie, de résultats ou de conclusions si ceux-ci ne sont pas explicitement dans `{raw_input}`.\n    Si `{raw_input}` ne contient aucune information pour une catégorie typique (comme 'Technique' ou 'Résultat'), alors votre sortie ne doit RIEN contenir pour cette catégorie.\n    N'inventez, ne déduisez, et ne paraphrasez que minimalement. Soyez littéral.\n    La sortie doit être une liste structurée en français où chaque élément indique clairement son type (catégorie) et le détail extrait de `{raw_input}`.
+    Analysez le texte médical nettoyé suivant (fourni comme `{{correct_transcription.output}}`), qui a déjà été corrigé :
+    ---
+    {{correct_transcription.output}}
+    ---
+    Votre mission est d'extraire des informations FACTUELLES et EXPLICITES de ce texte nettoyé UNIQUEMENT.
+    Vous pouvez utiliser l'outil `retrieve_similar_reports` pour voir des exemples de rapports et comprendre les *types de sections* (par exemple, 'Indication', 'Technique', 'Résultat', 'patient_age') qui existent typiquement. CECI EST LA SEULE UTILISATION AUTORISÉE DES RAPPORTS SIMILAIRES. NE REGARDEZ PAS LE CONTENU DE CES SECTIONS DANS LES RAPPORTS SIMILAIRES POUR Y TROUVER DES INFORMATIONS À EXTRAIRE OU POUR VOUS EN INSPIRER.
+    Pour chaque information que vous extrayez, elle doit être DIRECTEMENT PRÉSENTE dans le texte nettoyé.
+    Si le texte nettoyé ne contient aucune information pour une catégorie typique (comme 'Technique' ou 'Résultat'), alors votre sortie ne doit RIEN contenir pour cette catégorie.
+    N'inventez, ne déduisez, et ne paraphrasez que minimalement. Soyez littéral.
+    La sortie doit être une liste structurée en français où chaque élément indique clairement son type (catégorie) et le détail extrait du texte nettoyé.
   expected_output: >
-    Une liste structurée (ou objet JSON) en français contenant UNIQUEMENT les faits et observations médicales CLÉS et EXPLICITEMENT extraits de `{raw_input}`.\n    Si `{raw_input}` est "Patient diabétique.", la sortie attendue est:\n    ```json\n    [\n      {\"type\": \"indication\", \"detail\": \"Patient diabétique\"}\n    ]\n    ```\n    Si `{raw_input}` est "Femme de 50 ans, douleur au genou. IRM demandée.", la sortie attendue est:\n    ```json\n    [\n      {\"type\": \"patient_sex\", \"detail\": \"Femme\"},\n      {\"type\": \"patient_age\", \"detail\": \"50 ans\"},\n      {\"type\": \"indication\", \"detail\": \"douleur au genou\"},\n      {\"type\": \"technique_demandee\", \"detail\": \"IRM\"}\n    ]\n    ```\n    Si `{raw_input}` est vide ou non pertinent, la sortie doit être une liste vide `[]`.
+    Une liste structurée (ou objet JSON) en français contenant UNIQUEMENT les faits et observations médicales CLÉS et EXPLICITEMENT extraits du texte nettoyé.
+    Si le texte nettoyé est "Patient diabétique.", la sortie attendue est:
+    ```json
+    [
+      {\"type\": \"indication\", \"detail\": \"Patient diabétique\"}
+    ]
+    ```
+    Si le texte nettoyé est "Femme de 50 ans, douleur au genou. IRM demandée.", la sortie attendue est:
+    ```json
+    [
+      {\"type\": \"patient_sex\", \"detail\": \"Femme\"},
+      {\"type\": \"patient_age\", \"detail\": \"50 ans\"},
+      {\"type\": \"indication\", \"detail\": \"douleur au genou\"},
+      {\"type\": \"technique_demandee\", \"detail\": \"IRM\"}
+    ]
+    ```
+    Si le texte nettoyé est vide ou non pertinent, la sortie doit être une liste vide `[]`.
   agent: information_extractor
+  context:
+    - correct_transcription
 
 map_data_to_template_sections:
   description: >

@@ -100,13 +100,16 @@ def create_word_document(report_text: str, filename: str = "radiology_report.doc
         paragraph = document.add_paragraph()
         header_run = paragraph.add_run(header)
         header_run.bold = True
-        paragraph.add_run(" ")
 
-        if content and content != "-" and content.upper() != "NÉANT":
+        # Only add a space and content if content exists
+        if content:  # Check if content is not empty
+            paragraph.add_run(" ")  # Add space only if there is content
             paragraph.add_run(content)
-        else:
-            paragraph.add_run("Néant")
-        document.add_paragraph()
+        # If content is empty, nothing is added after the header, resulting in a blank line effectively
+        # The document.add_paragraph() below will ensure a blank line follows,
+        # or just space if this is the last section.
+
+        document.add_paragraph()  # Add a blank line after each section block (header + content)
 
     try:
         document.save(filename)
@@ -160,9 +163,7 @@ En résumé, l'examen révèle quelques petits foyers d'endométriose superficie
         generated_report_path_absolute = (
             project_root / "generated" / "reports" / unique_name
         )
-        generated_report_path_relative = (
-            Path("generated") / "reports" / unique_name
-        ) 
+        generated_report_path_relative = Path("generated") / "reports" / unique_name
 
         # Generate the .doc file from the final report text
         document_generation_status = create_word_document(
