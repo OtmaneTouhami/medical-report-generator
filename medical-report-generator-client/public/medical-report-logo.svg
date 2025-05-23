@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0284c7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <!-- Clipboard/Report base -->
+  <rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect>
+  <!-- Clipboard top -->
+  <path d="M8 2v2"></path>
+  <path d="M16 2v2"></path>
+  <path d="M8 4h8"></path>
+  <!-- Report lines -->
+  <path d="M8 10h8"></path>
+  <path d="M8 14h8"></path>
+  <path d="M8 18h5"></path>
+  <!-- Stethoscope -->
+  <circle cx="17" cy="15" r="1.5"></circle>
+  <path d="M17 16.5v1.5"></path>
+  <path d="M17 18c0 1-1 2-2 2"></path>
+</svg> 
