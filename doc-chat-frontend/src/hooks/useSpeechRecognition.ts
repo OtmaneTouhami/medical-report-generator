@@ -18,8 +18,6 @@ const useSpeechRecognition = (): SpeechRecognitionHook => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   
   const recognitionRef = useRef<SpeechRecognition | null>(null);
-  // Track which results have been processed as final
-  const processedResults = useRef<Set<number>>(new Set());
   // Store the latest transcript to avoid setText in the recognition callback causing effect reruns
   const latestTextRef = useRef<string>('');
   
@@ -52,32 +50,18 @@ const useSpeechRecognition = (): SpeechRecognitionHook => {
           setErrorMessage(null);
         }
         
-        let currentText = latestTextRef.current;
-        let interimTranscript = '';
-        
-        console.log('🎤 Speech recognition event received:', event.results.length, 'results');
-        
-        // Process new results
+        let newTranscript = "";
         for (let i = 0; i < event.results.length; i++) {
-          const result = event.results[i];
-          
-          if (result.isFinal) {
-            // Only add final results that haven't been processed yet
-            if (!processedResults.current.has(i)) {
-              const transcript = result[0].transcript;
-              console.log(`🎤 Final result [${i}]:`, transcript, '(confidence:', result[0].confidence.toFixed(2), ')');
-              currentText += transcript + ' ';
-              processedResults.current.add(i);
-            }
-          } else if (i === event.results.length - 1) {
-            // Only add the latest interim result
-            const transcript = result[0].transcript;
-            console.log(`🎤 Interim result [${i}]:`, transcript);
-            interimTranscript = transcript;
-          }
+          newTranscript += event.results[i][0].transcript;
         }
         
-        setText(currentText + interimTranscript);
+        console.log('🎤 Speech recognition event received:', event.results.length, 'results');
+        // Detailed logging for debugging
+        for (let i = 0; i < event.results.length; i++) {
+          console.log(`🎤 Detail - Result [${i}]: "${event.results[i][0].transcript}" (isFinal: ${event.results[i].isFinal}, confidence: ${event.results[i][0].confidence ? event.results[i][0].confidence.toFixed(2) : 'N/A'})`);
+        }
+        
+        setText(newTranscript);
       };
       
       recognition.onerror = (event: SpeechRecognitionErrorEvent) => {
@@ -182,24 +166,17 @@ const useSpeechRecognition = (): SpeechRecognitionHook => {
   }, [isListening, errorMessage]);
   
   const startListening = useCallback(() => {
-    console.log('🎤 Start listening called');
-    if (!recognitionRef.current) {
-      console.log('🎤 No recognition instance available');
-      setErrorMessage("La reconnaissance vocale n'est pas disponible sur ce navigateur.");
-      return;
+    if (recognitionRef.current && !isListening) {
+      try {
+        recognitionRef.current.start();
+        setIsListening(true);
+        setErrorMessage(null); // Clear previous errors
+        console.log("🎤 Speech recognition started");
+      } catch (error: any) {
+        console.error('🎤 Error starting speech recognition:', error);
+      }
     }
-    
-    // Check if the browser is online
-    if (!navigator.onLine) {
-      console.log('🎤 Browser is offline, speech recognition may not work');
-      setErrorMessage("Votre navigateur est hors ligne. La reconnaissance vocale nécessite une connexion Internet.");
-      return;
-    }
-    
-    setText('');
-    processedResults.current.clear();
-    setIsListening(true);
-  }, []);
+  }, [isListening]);
   
   const stopListening = useCallback(() => {
     console.log('🎤 Stop listening called');
@@ -213,8 +190,7 @@ const useSpeechRecognition = (): SpeechRecognitionHook => {
   
   const resetText = useCallback(() => {
     setText('');
-    processedResults.current.clear();
-    console.log('🎤 Speech recognition text reset');
+    console.log("🎤 Text reset");
   }, []);
   
   return {
